@@ -1,0 +1,20 @@
+---
+jogos:
+ - "Call of Dutty"
+ - "FSM X"
+
+cadastro:
+  nome: Nuno
+  sobre: Melo
+  idade: 44
+  endereco:
+    cidade: "Porto Salvo"
+    concelho: Oeiras
+    distrito: Lisboa
+    rua: xyz
+  Desportos:
+    - BTT
+    - Corrida
+    - Ginasio
+  jogos-pref: "{{ jogos }}"
+...

@@ -1,0 +1,5 @@
+[ansible]
+ansible-server
+ansible-test1
+#192.168.56.102
+#192.168.56.104
