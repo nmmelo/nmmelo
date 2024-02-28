@@ -1,0 +1,12 @@
+server:
+  children:
+    debian:
+      hosts:
+    redhat:
+      hosts:
+        ansible-server:
+        ansible-test1:
+    linux:
+      children:
+        debian:
+        redhat:
