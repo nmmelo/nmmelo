@@ -1,15 +1,16 @@
-[redhat]
+[debian]
 ansible-server
 ansible-test1
 192.168.56.102
 192.168.56.104
 
-[g2]
+[redhat]
+ansible-server
 ansible-test1
 
 [linux:children]
 redhat
-g2
+debian
 
 [mac]
 192.168.1.168

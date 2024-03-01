@@ -1,0 +1,4 @@
+ansible_port: 22
+ansible_ssh_user: adminssc
+http_port: 8080
+banda: pantera

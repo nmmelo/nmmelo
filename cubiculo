@@ -1,2 +1,24 @@
-[cubiculo]
-192.168.1.[1:254]
+[debian]
+debian01 ansible_host=192.168.56.102
+
+[redhat]
+redhat01 ansible_host=192.168.56.104
+
+[linux:children]
+debian
+redhat
+
+[linux:vars]
+zz=children
+
+[debian:vars]
+http_port=8080
+a=6767
+
+[redhat:vars]
+ansible_port=22
+ansible_ssh_user=adminssc
+http_port=8080
+b=6868
+
+
