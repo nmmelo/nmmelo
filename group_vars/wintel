@@ -1,0 +1,13 @@
+ansible_user: adminssc                                    ### ansible user to connect
+#ansible_password: adminR7155C                                ### ansible password to connect
+ansible_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          32376564626366373261656130646430396532656532386261633431343838623362323132363939
+          6430626433306138653966613734633664633365333531310a626632623262316339303666363039
+          36393261333031636366613738613230653063323561623866623362303661326363366135663364
+          6236326232663461370a353161376337373035316332666663346666613964383965616639393866
+          3466
+ansible_port: 5985                                     ### winrm port on remote windows machine
+ansible_connection: winrm
+#ansible_winrm_transport: kerberos                     ### for kerberos authentication
+ansible_winrm_server_cert_validation: ignore  
