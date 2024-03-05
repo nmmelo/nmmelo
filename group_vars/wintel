@@ -7,12 +7,13 @@ ansible_password: !vault |
           36393261333031636366613738613230653063323561623866623362303661326363366135663364
           6236326232663461370a353161376337373035316332666663346666613964383965616639393866
           3466
-#ansible_port: 5985
-ansible_port: 5986                                     ### winrm port on remote windows machine
+ansible_port: 5985
+#ansible_port: 5986                                     ### winrm port on remote windows machine
 ansible_connection: winrm
-ansible_winrm_transport: basic
+#ansible_winrm_transport: basic
+ansible_winrm_transport: ntlm
 #ansible_winrm_transport: kerberos                     ### for kerberos authentication
 ansible_winrm_server_cert_validation: ignore
 ansible_winrm_message_encryption: auto # value: auto; always, never for kerberos, NTLM or CredSSP
-#ansible_winrm_schema: http
-ansible_winrm_scheme: https
+ansible_winrm_scheme: http
+#ansible_winrm_scheme: https
