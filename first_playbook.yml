@@ -1,0 +1,7 @@
+---
+- name: First Playbook Example
+  hosts: debian
+  become: true
+  #gather_facts: False
+  roles:
+    - first-playbook
