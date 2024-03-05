@@ -1,0 +1,32 @@
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+- name: Install Apache2 on Ubuntu Distribution
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - apache2
+    - htop
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install HTTP on CentOS or Red Hat
+  ansible.builtin.yum:
+     name: "{{ item }}"
+     state: latest
+  with_items:
+     - httpd
+     - htop
+  when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
+
+- name: restart apache
+  service: 
+    name: apache2 
+    state: started 
+    enabled: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: restart httpd Redhat
+  service: 
+    name: httpd 
+    state: started 
+    enabled: yes
+  when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'

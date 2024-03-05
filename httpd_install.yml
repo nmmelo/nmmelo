@@ -1,0 +1,7 @@
+---
+- name: Install Apache2/HTTP service
+  hosts: redhat
+  become: true
+  #gather_facts: False
+  roles:
+    - http-install

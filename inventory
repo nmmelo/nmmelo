@@ -8,7 +8,6 @@ ansible-test1
 IC000063250 ansible_host=192.168.56.1      ### your remote windows hots
 
 [redhat]
-ansible-server
 ansible-test1
 
 [linux:children]
