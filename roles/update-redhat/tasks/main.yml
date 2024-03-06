@@ -1,0 +1,23 @@
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html
+# https://www.toptechskills.com/ansible-tutorials-courses/ansible-yum-module-tutorial-examples/
+---
+- name: Update Redhat Distribution
+  ansible.builtin.yum:
+     name: "*"
+     state: latest
+     update_cache: yes
+  when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
+  register: yum_output
+
+- name: print available ruby versions
+  debug:
+    msg: "{{ item.version }}-{{ item.release }}"
+  loop: "{{ yum_output.results | selectattr('yumstate', 'equalto', 'available') | list }}"
+  ignore_errors: true
+
+- debug: var=yum_output
+
+- name: Print output of update REDHAT
+  ansible.builtin.debug:
+     msg: "{{ yum_output }}"
+...

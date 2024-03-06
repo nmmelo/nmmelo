@@ -3,19 +3,19 @@
   ansible.builtin.apt:
     name: "{{ item }}"
     state: latest
-  with_items:
-    - apache2
-    - htop
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    with_items:
+      - apache2
+      - htop
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Install HTTP on CentOS or Red Hat
   ansible.builtin.yum:
      name: "{{ item }}"
      state: latest
-  with_items:
-     - httpd
-     - htop
-  when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
+     with_items:
+       - httpd
+       - htop
+     when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
 
 - name: restart apache
   service: 
@@ -30,3 +30,5 @@
     state: started 
     enabled: yes
   when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
+
+...

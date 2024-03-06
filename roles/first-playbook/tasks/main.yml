@@ -11,4 +11,5 @@
 - name: Print result of Ping All Server by shell
   ansible.builtin.debug:
     msg: "{{ result }}"
+...
 
