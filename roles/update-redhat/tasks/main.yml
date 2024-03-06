@@ -1,5 +1,6 @@
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html
 # https://www.toptechskills.com/ansible-tutorials-courses/ansible-yum-module-tutorial-examples/
+# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html
 ---
 - name: Update Redhat Distribution
   ansible.builtin.yum:
@@ -11,7 +12,7 @@
   tags:
    - update-redhat
 
-- name: print available ruby versions
+- name: print Update Redhat Distribution
   debug:
     msg: "{{ item.version }}-{{ item.release }}"
   loop: "{{ yum_output.results | selectattr('yumstate', 'equalto', 'available') | list }}"
