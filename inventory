@@ -1,8 +1,8 @@
 [debian]
 ansible-server
 ansible-test1
-192.168.56.102
-192.168.56.104
+#192.168.56.102
+#192.168.56.104
 
 [wintel]
 IC000063250 ansible_host=192.168.56.1      ### your remote windows hots
@@ -13,6 +13,10 @@ ansible-test1
 [linux:children]
 redhat
 debian
+
+[server:children]
+redhat
+wintel
 
 [mac]
 192.168.1.168
