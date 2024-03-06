@@ -8,16 +8,24 @@
      update_cache: yes
   when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
   register: yum_output
+  tags:
+   - update-redhat
 
 - name: print available ruby versions
   debug:
     msg: "{{ item.version }}-{{ item.release }}"
   loop: "{{ yum_output.results | selectattr('yumstate', 'equalto', 'available') | list }}"
   ignore_errors: true
+  tags:
+   - update-redhat
 
 - debug: var=yum_output
+  tags:
+   - update-redhat
 
 - name: Print output of update REDHAT
   ansible.builtin.debug:
      msg: "{{ yum_output }}"
+  tags:
+   - update-redhat
 ...
