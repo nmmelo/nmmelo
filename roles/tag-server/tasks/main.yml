@@ -1,0 +1,22 @@
+---
+- name: SISOP | Set a hostname
+  ansible.builtin.hostname:
+    name: ansible-server02
+    use: systemd
+  tags: hostname
+
+- name: COPY | COPY ansible.cfg
+  ansible.builtin.copy:
+     src: /etc/ansible/ansible.cfg
+     dest: /tmp/ansible.cfg
+     owner: adminssc
+     group: adminssc
+     mode: 0644
+  tags: COPY
+
+- name: SISOP | Disable SELINUX (Temp)
+  ansible.builtin.selinux:
+    state: disabled
+  tags:
+    - security
+...

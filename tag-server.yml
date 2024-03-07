@@ -1,0 +1,7 @@
+---
+- name: Testing tag
+  hosts: redhat
+  become: true
+  roles:
+    - tag-server
+...
