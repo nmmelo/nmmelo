@@ -6,7 +6,7 @@
   tags:
    - variable-test
 
-- name: Debug variavel pelo defautls
+- name: Debug variavel pelo defautls | {{ message1 }}
   ansible.builtin.debug:
      msg: "{{ message1 }}"
   tags:
