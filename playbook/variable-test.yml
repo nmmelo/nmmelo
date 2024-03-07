@@ -1,0 +1,8 @@
+---
+- name: Testando variaveis
+  hosts: redhat
+  vars:
+    message: "isto é um teste atraves de variavel"
+  roles:
+    - variable-test
+...

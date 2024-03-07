@@ -1,0 +1,13 @@
+---
+- name: Debug variavel local
+  ansible.builtin.debug:
+     msg: "{{ message }}"
+  tags:
+   - variable-test
+
+- name: Debug variavel pelo defautls
+  ansible.builtin.debug:
+     msg: "{{ message1 }}"
+  tags:
+   - variable-test
+...
