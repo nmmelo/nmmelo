@@ -1,6 +1,7 @@
 ---
 - name: Testando variaveis
   hosts: redhat
+  become: yes
   vars:
     message: "isto é um teste atraves de variavel"
   roles:

@@ -11,4 +11,11 @@
      msg: "{{ message1 }}"
   tags:
    - variable-test
+
+- name: DNF | Install packages
+  ansible.builtin.dnf:
+    name: "{{ packages }}"
+    state: latest
+  tags:
+   - install-packages
 ...
