@@ -1,0 +1,19 @@
+---
+- name: Devolver o IPV4 from Cliente
+  ansible.builtin.debug:
+     msg: "{{ var_ipv4 }}"
+  tags:
+    - debug-ipv4
+
+- name: Devolver o IPV4  Defaults from Cliente  {{ ansible_fqdn }}
+  ansible.builtin.debug:
+     msg: "{{ var_ipv4_defaults }}"
+  tags:
+    - debug-ipv4-defaults
+
+- name: Devolver o Date/time from Cliente <{{ ansible_hostname }}>
+  ansible.builtin.debug:
+     msg: "{{ var_date }}"
+  tags:
+    - debug-date
+...

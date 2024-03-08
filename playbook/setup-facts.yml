@@ -1,0 +1,7 @@
+---
+- name: Facts of Ansible | Setup Module
+  hosts: redhat
+  become: true
+  roles:
+    - facts-setup
+...
