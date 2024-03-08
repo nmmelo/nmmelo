@@ -1,0 +1,21 @@
+# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_prompts.html
+---
+- name: Ansible Prompt | Create a user on Linux
+  become: true
+  hosts: redhat
+  vars_prompt:
+     - name: username
+       prompt: What is your name?
+       private: false
+     - name: password
+       prompt: What is your password?
+       private: true # opcional, default is true
+       encrypt: "md5_crypt" # required passlib, sudo pip install passlib
+       confirm: yes
+       salt_size: 7
+     - name: shell
+       prompt: What is the shell?
+       private: false
+  roles:
+    - prompt-vars
+...

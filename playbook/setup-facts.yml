@@ -1,7 +1,8 @@
 ---
 - name: Facts of Ansible | Setup Module
-  hosts: redhat
+  hosts: ansible
   become: true
+  become_method: sudo
   roles:
     - facts-setup
 ...
