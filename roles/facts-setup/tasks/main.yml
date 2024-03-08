@@ -1,3 +1,4 @@
+# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html
 ---
 - name: Devolver o IPV4 from Cliente
   ansible.builtin.debug:
@@ -13,7 +14,7 @@
 
 - name: Devolver o Date/time from Cliente <{{ ansible_hostname }}>
   ansible.builtin.debug:
-     msg: "{{ var_date }}"
+     msg: "{{ var_date.date }}"
   tags:
     - debug-date
 ...
