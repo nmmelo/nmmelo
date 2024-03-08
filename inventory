@@ -7,8 +7,15 @@ ansible-test1
 [wintel]
 IC000063250 ansible_host=192.168.56.1      ### your remote windows hots
 
-[redhat]
+[redhats]
 ansible-server
+
+[redhat]
+ansible-test1
+
+[ansible:children]
+redhats
+redhat
 
 [linux:children]
 redhat
