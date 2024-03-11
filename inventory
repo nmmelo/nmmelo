@@ -16,7 +16,6 @@ ansible-test1
 [ansible:children]
 redhats
 redhat
-wintel
 
 [linux:children]
 redhat

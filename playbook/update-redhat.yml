@@ -1,6 +1,6 @@
 ---
 - name: Update Redhat/Centos Distribution
-  hosts: redhat
+  hosts: redhat:ansible
   become: yes
   #gather_facts: False
   roles:

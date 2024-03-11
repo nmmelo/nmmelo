@@ -1,30 +1,28 @@
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html
 # https://www.toptechskills.com/ansible-tutorials-courses/ansible-yum-module-tutorial-examples/
 # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
 ---
 - name: Update Redhat Distribution
   ansible.builtin.yum:
      name: "*"
      state: latest
      update_cache: yes
+     nobest: true # Set best option to False, so that transactions are not limited to best candidates only.
+     bugfix: true #If set to true, and state=latest then only installs updates that have been marked bugfix related.
+     security: false  #If set to true, and state=latest then only installs updates that have been marked security related.
   when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
   register: yum_output
   tags:
    - update-redhat
 
-- name: print Update Redhat Distribution
-  debug:
-    msg: "{{ item.version }}-{{ item.release }}"
-  loop: "{{ yum_output.results | selectattr('yumstate', 'equalto', 'available') | list }}"
-  ignore_errors: true
+- name: Print output Update Redhat | Debug mode with var
+  ansible.builtin.debug: 
+   var: yum_output
   tags:
    - update-redhat
 
-- debug: var=yum_output
-  tags:
-   - update-redhat
-
-- name: Print output of update REDHAT
+- name: Print output of update REDHAT | Debug mode with msg
   ansible.builtin.debug:
      msg: "{{ yum_output }}"
   tags:
