@@ -1,13 +1,14 @@
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
 ---
 - name: Print a Message
   ansible.builtin.debug:
-     msg: 'Utilizador: {{ username }} | Password: {{ Password }} | Shell: {{ shell }}'
+     msg: 'Utilizador: {{ username }} | Password: {{ password }} | Shell: {{ shell }}'
   tags:
     - print-debug
 
 - name: User | Add a User
   ansible.builtin.user:
-     username: "{{ username }}"
+     name: "{{ username }}"
      comment: "Create a user by Ansible playbook"
      shell: "{{ shell }}"
      home: "/home/{{ username }}"
