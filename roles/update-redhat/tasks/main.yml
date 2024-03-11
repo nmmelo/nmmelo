@@ -24,6 +24,7 @@
     nobest: true
     update_only: yes
     update_cache: true
+  when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
   tags:
    - update-redhat-kernel
 
@@ -31,6 +32,7 @@
   ansible.builtin.shell:
    cmd: yum update --nobest -y
   register: shell_output
+  when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
   tags:
    - update-redhat-shell
 
