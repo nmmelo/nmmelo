@@ -32,7 +32,7 @@
   ansible.builtin.shell:
    cmd: yum update --nobest -y
   register: shell_output
-  when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
+  when: ansible_facts['distribution'] == "OracleLinux" or ansible_facts['distribution'] == "CentOS" 
   tags:
    - update-redhat-shell
 
@@ -55,4 +55,16 @@
   tags:
    - print-debug-output
    - update-redhat
+
+- name: Upgrade All Debian | By APT
+  ansible.builtin.apt:
+    autoremove: true
+    clean: true
+    name: "*"
+    state: latest
+    update_cache: yes
+  register: apt_output  
+  when: ansible_distribution == 'Debian'
+  tags:
+   - update-debian
 ...

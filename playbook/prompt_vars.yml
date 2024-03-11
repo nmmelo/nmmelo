@@ -2,7 +2,7 @@
 ---
 - name: Ansible Prompt | Create a user on Linux
   become: true
-  hosts: redhat
+  hosts: debian
   vars_prompt:
      - name: username
        prompt: What is your name?
