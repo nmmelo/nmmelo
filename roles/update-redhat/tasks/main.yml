@@ -20,11 +20,13 @@
   ansible.builtin.debug: 
    var: yum_output
   tags:
+   - print-debug-output
    - update-redhat
 
 - name: Print output of update REDHAT | Debug mode with msg
   ansible.builtin.debug:
      msg: "{{ yum_output }}"
   tags:
+   - print-debug-output
    - update-redhat
 ...
