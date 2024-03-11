@@ -1,0 +1,13 @@
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/find_module.html
+---
+- name: SISOP | Find files
+  ansible.builtin.find:
+     path: /tmp
+     patterns: '*.cfg'
+  register: myresult
+
+- name: SISOP | Show files
+  ansible.builtin.debug:
+    msg: "{{ myresult.files | map(attribute='path') | sort }}" # list or first or last or sort
+  tags: print-output
+...

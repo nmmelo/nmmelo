@@ -1,0 +1,7 @@
+---
+- name: Ansible Register Filters 
+  hosts: redhats
+  become: yes
+  roles:
+   - 9-registerfilters
+...

@@ -2,8 +2,9 @@
 # https://www.toptechskills.com/ansible-tutorials-courses/ansible-yum-module-tutorial-examples/
 # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
+# https://4sysops.com/archives/ansible-yum-module-install-the-rhelcentos-packages/
 ---
-- name: Update Redhat Distribution
+- name: Update Redhat Distribution | By YUM
   ansible.builtin.yum:
      name: "*"
      state: latest
@@ -15,6 +16,29 @@
   register: yum_output
   tags:
    - update-redhat
+
+- name: Update Kernel | By YUM
+  ansible.builtin.yum:
+    name: 'kernel*'
+    state: latest
+    nobest: true
+    update_only: yes
+    update_cache: true
+  tags:
+   - update-redhat-kernel
+
+- name: Update All Packages | By Shell
+  ansible.builtin.shell:
+   cmd: yum update --nobest -y
+  register: shell_output
+  tags:
+   - update-redhat-shell
+
+- name: Print output Update by Shell
+  ansible.builtin.debug: 
+   var: shell_output
+  tags:
+   - update-redhat-shell
 
 - name: Print output Update Redhat | Debug mode with var
   ansible.builtin.debug: 

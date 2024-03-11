@@ -1,0 +1,7 @@
+---
+- name: Ansible Register Outputs 
+  hosts: redhats
+  become: yes
+  roles:
+   - 8-registeroutputs
+...
