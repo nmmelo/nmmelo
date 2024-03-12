@@ -2,26 +2,26 @@
 ---
 - block:
    - name: Debug Mode
-     ansible.builttin.debug:
+     ansible.builtin.debug:
        msg: "#### EXECUTADO NORMALMENTE ###"
      tags:
        - print-debug
   
    - name: Simulando erros
-     ansible.builttin.shell:
+     ansible.builtin.shell:
        cmd: ./configure
        args:
          chdir: /tmp
     
    - name: Debug Mode 2
-     ansible.builttin.debug:
+     ansible.builtin.debug:
        msg: "#### NUNCA SERA EXECUTADO ###"
      tags:
        - print-debug
   
   rescue:
      - name: Debug Mode 3
-       ansible.builttin.debug:
+       ansible.builtin.debug:
         msg: "ERROR - FALHA NO TARGET {{ inventory_hostname }}"
        tags:
          - print-debug
