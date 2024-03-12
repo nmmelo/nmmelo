@@ -10,8 +10,7 @@
    - name: Simulando erros
      ansible.builtin.shell:
        cmd: ./configure
-       args:
-         chdir: /tmp
+       chdir: /tmp
     
    - name: Debug Mode 2
      ansible.builtin.debug:
