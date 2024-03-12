@@ -1,0 +1,35 @@
+# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html
+---
+- blocks:
+   - name: Debug Mode
+     ansible.builttin.debug:
+       msg: "#### EXECUTADO NORMALMENTE ###"
+     tags:
+       - print-debug
+  
+   - name: Simulando erros
+     ansible.builttin.shell:
+       cmd: ./configure
+       args:
+         chdir: /tmp
+    
+   - name: Debug Mode 2
+     ansible.builttin.debug:
+       msg: "#### NUNCA SERA EXECUTADO ###"
+     tags:
+       - print-debug
+  
+  rescue:
+     - name: Debug Mode 3
+       ansible.builttin.debug:
+        msg: "ERROR - FALHA NO TARGET {{ inventory_hostname }}"
+       tags:
+         - print-debug
+  # You can also add an always section to a block. Tasks in the always section run no matter what the task status of the previous block is. Block with always section
+  always: 
+     - name: SISOP | Update System
+       ansible.builtin.dnf:
+         name: "*"
+         state: latest
+... 
+
