@@ -59,12 +59,18 @@
 - name: Upgrade All Debian | By APT
   ansible.builtin.apt:
     autoremove: true
-    clean: true
+    #clean: true
     name: "*"
     state: latest
     update_cache: yes
   register: apt_output  
-  when: ansible_distribution == 'Debian'
+  when: ansible_distribution == 'Ubuntu'
+  tags:
+   - update-debian
+
+- name: Print output of update Debian | Debug mode
+  ansible.builtin.debug:
+     msg: "{{ apt_output }}"
   tags:
    - update-debian
 ...
