@@ -1,0 +1,11 @@
+---
+- name: Ansible  Conditionals with bool
+  become: true
+  hosts: redhat:debian
+  vars:
+    backup: false
+    snapshot: true
+  roles:
+    - role: 11-ansibleConditionalBool 
+      when: ansible_facts['os_family'] == 'Debian' or  ansible_facts['os_family'] == 'RedHat'
+...

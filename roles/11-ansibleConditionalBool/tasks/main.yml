@@ -1,0 +1,15 @@
+---
+- name: Run the Task If 'backup' or 'snapshot' is true
+  ansible.builtin.debug:
+     msg: "Remember, snapshot is not Backup!"
+  when: backup or snapshot | bool
+  tags:
+    - print-debug-output
+
+- name: Run the Task If 'backup' is false
+  ansible.builtin.debug:
+     msg: "Critical. Make backup"
+  when: not backup
+  tags:
+    - print-debug-output
+...
