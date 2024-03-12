@@ -3,6 +3,8 @@
 # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
 # https://4sysops.com/archives/ansible-yum-module-install-the-rhelcentos-packages/
+
+#https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html
 ---
 - name: Update Redhat Distribution | By YUM
   ansible.builtin.yum:
