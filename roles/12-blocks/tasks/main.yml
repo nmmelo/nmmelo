@@ -1,6 +1,6 @@
 # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html
 ---
-- blocks:
+- block:
    - name: Debug Mode
      ansible.builttin.debug:
        msg: "#### EXECUTADO NORMALMENTE ###"
