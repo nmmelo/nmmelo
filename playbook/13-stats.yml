@@ -1,0 +1,8 @@
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/stat_module.html
+---
+- name: Ansible Module stat
+  hosts: debian:redhat
+  become: yes
+  roles:
+    - 13-stat
+... 

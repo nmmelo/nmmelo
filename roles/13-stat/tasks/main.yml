@@ -1,0 +1,27 @@
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/stat_module.html
+# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_loops.html
+# https://www.redhat.com/sysadmin/ansible-lists-dictionaries-yaml
+---
+- name: SISOP | Verificando se o arquivo existe
+  ansible.builtin.stat:
+      path: /tmp/ansible.cfg
+  register: file
+  tags:
+    - sisop-file
+
+- name: Debug Mode
+  ansible.builtin.debug:
+     msg: "File found"
+  when: file.stat.exists
+
+- name: Debug Mode 2
+  ansible.builtin.debug:
+     msg: "File not found"
+  when: file.stat.exists == false
+
+- name: Debug has changed 3
+  ansible.builtin.debug:
+     msg: "Ownership has changed"
+     #ignore_errors: yes
+  when: file.stat.pw_name != "root"
+...
