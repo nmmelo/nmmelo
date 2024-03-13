@@ -1,29 +1,39 @@
-# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
 ---
 - block:
-   - name: Debug Mode
-     ansible.builtin.debug:
-       msg: "#### EXECUTADO NORMALMENTE ###"
-     tags:
-       - print-debug
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path: /tmp/ipset/
+      state: directory
+      mode: '0644'
+      owner: root
+      group: root
+    become: true
+    become_user: root
   
-   - name: Simulando erros
-     ansible.builtin.shell:
-       cmd: ./configure
-       chdir: /tmp
-    
-   - name: Debug Mode 2
-     ansible.builtin.debug:
-       msg: "#### NUNCA SERA EXECUTADO ###"
-     tags:
-       - print-debug
-  
+
+  - name: Add entry to IPSet
+    #debug: msg={{ ipset_rule.name }}{{ entry }}
+    #command: firewall-cmd --permanent --ipset={{ ipset_rule.name }} --add-entry={{ entry }}
+    template:
+      src: ipset.xml.j2
+      dest: /tmp/ipset/{{ item.name }}.xml
+      owner: root
+      group: root
+      mode: '0644' 
+      backup: yes
+    with_items: "{{ ipset_rules }}"
+    become: true
+    become_user: root
+     # loop_control:
+     #   loop_var: entry
   rescue:
-     - name: Debug Mode 3
-       ansible.builtin.debug:
+    - name: Debug Mode 3
+      ansible.builtin.debug:
         msg: "ERROR - FALHA NO TARGET {{ inventory_hostname }}"
-       tags:
-         - print-debug
+      tags:
+        - print-debug
   # You can also add an always section to a block. Tasks in the always section run no matter what the task status of the previous block is. Block with always section
   always: 
      - name: SISOP | Update System OracleLinux
@@ -46,5 +56,4 @@
        when: ansible_distribution == 'Ubuntu'
        tags:
          - update-debian
-... 
-
+...
