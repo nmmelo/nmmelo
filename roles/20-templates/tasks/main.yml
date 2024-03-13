@@ -1,7 +1,29 @@
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_module.html
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_module.html
+# https://github.com/eapugo/Ansible-firewalld/blob/master/tasks/main.yml
+# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_error_handling.html#ignoring-failed-commands
+
 ---
 - block:
+  - name: Verificar e Instalar o serviço Firewalld
+    ansible.builtin.package:
+       name: firewalld
+       state: latest
+    ignore_errors: true
+    tags:
+      - install-firewalld-service
+
+  - name: Start and enabled the Firewalld
+    ansible.builtin.systemd:
+       name: firewalld
+       state: started
+       enabled: yes
+       daemon_reload: true
+    register: started
+    ignore_errors: true
+  
   - name: Create a directory if it does not exist
     ansible.builtin.file:
       path: /tmp/ipset/
@@ -10,8 +32,7 @@
       owner: root
       group: root
     become: true
-    become_user: root
-  
+    become_user: root 
 
   - name: Add entry to IPSet
     #debug: msg={{ ipset_rule.name }}{{ entry }}
@@ -26,6 +47,7 @@
     with_items: "{{ ipset_rules }}"
     become: true
     become_user: root
+    notify: firewalld reload
      # loop_control:
      #   loop_var: entry
   rescue:
@@ -56,4 +78,6 @@
        when: ansible_distribution == 'Ubuntu'
        tags:
          - update-debian
+      
+     #- name: SISOP | Remove old Backup IPSET FILES
 ...
