@@ -81,19 +81,21 @@
 
      - name: SISOP | Stat 
        ansible.builtin.stat: 
-         path: "{{ ipset_folder }}/*@*"
-       register: files
+         path: "{{ ipset_folder }}/"
+       register: find
       
      - name: SISOP | Find ipset xml files
        ansible.builtin.find:
           paths: "{{ ipset_folder}}"
           patterns: "*@*"
+          age: 30d
+          recurse:  yes
        register: find_results
-       when: files.stat.exists
+       when: find.stat.exists
     
      - name: Debug Mode 4
        ansible.builtin.debug:
-        msg: " {{ files }}"
+        msg: " {{ find_results }}"
        tags:
         - print-debug
 
@@ -102,5 +104,12 @@
          path: "{{ item['path'] }}"
          state: absent
        with_items: "{{ find_results['files'] }}"
-       when: files.stat.exists
+       when: find_results.files != 0
+     
+     #- name: SISOP | Remove old Backup IPSET FILES
+     #  include_tasks: remove.yml 
+     #  vars:
+     #    path_ipset: "{{ item }}"
+       #when: inventory_hostname == item.hostname
+     #  with_items: "{{ ipset_folder }}"
 ...

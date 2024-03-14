@@ -1,0 +1,7 @@
+---
+- name: SISOP | Remove the Old Backup IPSET 
+  ansible.builtin.shell:
+     cmd: find "{{ path_ipset }}" -type f -name '*@*' -mtime +30 -delete
+  tags:
+    - remove-old
+...
