@@ -96,6 +96,7 @@
      - name: Debug Mode 4
        ansible.builtin.debug:
         msg: " {{ find_results }}"
+       when: find.stat.exists != true
        tags:
         - print-debug
 
