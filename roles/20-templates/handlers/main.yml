@@ -3,6 +3,7 @@
 - name: firewalld reload
   ansible.builtin.command:
     cmd: firewall-cmd --reload
+  ignore_errors: true
 
 #- name: Start and enabled the Firewalld
 #  ansible.builtin.systemd:

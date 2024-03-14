@@ -1,3 +1,4 @@
+ipset_folder: /tmp/ipset
 ipset_rules:
       - name: "ipset-ssh"
         entries:
@@ -19,6 +20,10 @@ ipset_rules:
           - "10.31.241.25" # veeambk01
           - "10.31.241.26" # veeambk01
           - "10.31.241.27" # veeambk01
+          - "10.31.241.26" # veeambk01
+          - "10.31.241.27" # veeambk01
+          - "10.31.241.26" # veeambk01
+          - "10.31.241.27" # veeambk01
       - name: "ipset-nfs"
         entries:
           - "10.31.241.16" # fap-dbrec01.emfa.pt
@@ -29,6 +34,9 @@ ipset_rules:
       - name: "ipset-ntp"
         entries:
           - "10.0.100.9" # fap-nsresolver.emfa.pt
+          - "10.0.100.250" # fap-zabbixproxy-dmz.emfa.pt
+          - "10.0.100.250" # fap-zabbixproxy-dmz.emfa.pt
+          - "10.0.100.250" # fap-zabbixproxy-dmz.emfa.pt
       - name: "ipset-tns"
         entries:
           - "10.0.200.1" # Lig VPN
@@ -59,6 +67,13 @@ ipset_rules:
           - "10.31.241.4" # veeamproxy02
           - "10.31.241.20" # veeamproxy01
           - "10.31.241.21" # veeambk01
+          - "10.0.100.250" # fap-zabbixproxy-dmz.emfa.pt
+          - "10.0.100.250" # fap-zabbixproxy-dmz.emfa.pt
       - name: "ipset-zabbix"
         entries:
+          - "10.0.100.250" # fap-zabbixproxy-dmz.emfa.pt
+          - "10.0.100.250" # fap-zabbixproxy-dmz.emfa.pt
+          - "10.0.100.250" # fap-zabbixproxy-dmz.emfa.pt
+          - "10.0.100.250" # fap-zabbixproxy-dmz.emfa.pt
+          - "10.0.100.250" # fap-zabbixproxy-dmz.emfa.pt
           - "10.0.100.250" # fap-zabbixproxy-dmz.emfa.pt

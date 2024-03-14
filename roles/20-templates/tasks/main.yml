@@ -39,7 +39,7 @@
     #command: firewall-cmd --permanent --ipset={{ ipset_rule.name }} --add-entry={{ entry }}
     template:
       src: ipset.xml.j2
-      dest: /tmp/ipset/{{ item.name }}.xml
+      dest: "{{ ipset_folder }}/{{ item.name }}.xml"
       owner: root
       group: root
       mode: '0644' 
@@ -78,6 +78,29 @@
        when: ansible_distribution == 'Ubuntu'
        tags:
          - update-debian
+
+     - name: SISOP | Stat 
+       ansible.builtin.stat: 
+         path: "{{ ipset_folder }}/*@*"
+       register: files
       
-     #- name: SISOP | Remove old Backup IPSET FILES
+     - name: SISOP | Find ipset xml files
+       ansible.builtin.find:
+          paths: "{{ ipset_folder}}"
+          patterns: "*@*"
+       register: find_results
+       when: files.stat.exists
+    
+     - name: Debug Mode 4
+       ansible.builtin.debug:
+        msg: " {{ files }}"
+       tags:
+        - print-debug
+
+     - name: SISOP | Remove old Backup IPSET FILES
+       ansible.builtin.file:
+         path: "{{ item['path'] }}"
+         state: absent
+       with_items: "{{ find_results['files'] }}"
+       when: files.stat.exists
 ...
