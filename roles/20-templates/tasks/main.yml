@@ -105,7 +105,6 @@
          path: "{{ item['path'] }}"
          state: absent
        with_items: "{{ find_results['files'] }}"
-       when: find_results.files != 0
      
      #- name: SISOP | Remove old Backup IPSET FILES
      #  include_tasks: remove.yml 
