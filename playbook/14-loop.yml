@@ -1,0 +1,8 @@
+# https://www.udemy.com/course/ansible-para-sysadmin/learn/lecture/37494652#overview
+---
+- name: Ansible Loop
+  hosts: debian:redhat
+  become: yes
+  roles:
+    - 14-loop 
+...

@@ -1,0 +1,13 @@
+---
+- name: User | Create User 
+  ansible.builtin.user:
+     user: "{{ item }}"
+     state: present
+     group: "wheel"
+  loop:
+    - pvmelo
+    - pcardoso
+    - lpsa
+  tags:
+    - add-user
+...

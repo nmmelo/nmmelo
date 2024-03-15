@@ -1,7 +1,7 @@
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
 ---
 - name: Add entry to IPSet Firewall Service
-  hosts: debian
+  hosts: debian:redhat
   become: yes
   roles:
     - 20-templates
