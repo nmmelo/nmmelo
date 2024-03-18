@@ -1,6 +1,6 @@
 ---
 - name: Update Redhat/Centos Distribution
-  hosts: redhat:debian
+  hosts: redhat:debian:redhats
   become: yes
   #gather_facts: False
   roles:
