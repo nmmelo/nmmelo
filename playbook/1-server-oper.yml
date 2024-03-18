@@ -1,0 +1,7 @@
+---
+- name: SISOP |  Server Operation
+  hosts: debian:redhat
+  becomes: yes
+  roles:
+    - 1-server-oper
+...
