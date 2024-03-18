@@ -1,5 +1,5 @@
 ---
-- name: SISOP |  Server Operation
+- name: SISOP | Server Operation
   hosts: debian:redhat
   become: yes
   roles:

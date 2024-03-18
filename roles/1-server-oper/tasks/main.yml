@@ -1,19 +1,65 @@
+# https://docs.ansible.com/ansible/2.9/modules/reboot_module.html
+# https://www.cyberciti.biz/faq/ansible-reboot-linux-machine-or-server-with-playbooks/
+# https://www.redhat.com/sysadmin/automate-reboot-ansible
+# https://docs.ansible.com/ansible/latest/collections/community/general/shutdown_module.html - shutdown module
+# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_delegation.html#delegating-tasks
+
 ---
 - name: SISOP | Reboot Server
   ansible.builtin.reboot:
-    msg: "Reboot initiated by Ansible for kernel updates"
+    msg: "Reboot initiated by Ansible for kernel updates to {{ inventory_hostname }}"
     connect_timeout: 5
     reboot_timeout: 300
     pre_reboot_delay: 0
     post_reboot_delay: 30
     test_command: uptime
-  register: reboot-output
+  register: reboot_output
   tags:
    - server-reboot
 
 - name: SISOP | Debug reboot server
   ansible.builtin.debug:
-    msg: "{{ reboot-output }}"
+    msg: "{{ reboot_output }}"
   tags:
     - server-reboot
+
+- name: SISOP | Shutdown Server
+  community.general.shutdown:
+     delay: 60
+  register: shutdown_output
+  ignore_unreachable: true
+  when: ansible_distribution == 'Ubuntu' or ansible_facts['distribution'] == "OracleLinux"
+  tags:
+    - server-shutdown
+
+- name: SISOP | Debug shutdown server
+  ansible.builtin.debug:
+    msg: "{{ shutdown_output }}"
+  when: ansible_distribution == 'Ubuntu' or ansible_facts['distribution'] == "OracleLinux"
+  ignore_unreachable: true
+  tags:
+   - server-shutdown
+
+- name: SISOP | Shutdown Server v2
+  ansible.builtin.command: 
+     cmd: /sbin/shutdown -h now
+  become: true
+  register: shut_server
+  ignore_unreachable: true
+  when: ansible_distribution == 'Ubuntu' or ansible_facts['distribution'] == "OracleLinux"
+  tags:
+    - server-shut
+
+- name: SISOP | Server Shutdown - wait go down
+  local_action: wait_for host={{ ansible_ssh_host }} port=22 state=stopped
+  tags:
+    - server-shut  
+
+- name: SISOP | Debug Server shutdown v2
+  ansible.builtin.debug:
+    msg: "{{ shut_server }}"
+  ignore_unreachable: true
+  when: ansible_distribution == 'Ubuntu' or ansible_facts['distribution'] == "OracleLinux"
+  tags:
+    - server-shut
 ...
