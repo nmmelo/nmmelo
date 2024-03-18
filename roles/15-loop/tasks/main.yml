@@ -1,4 +1,5 @@
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/password_hash_filter.html
 ---
 - name: User | Remove User 
   ansible.builtin.user:
@@ -6,9 +7,9 @@
      state: absent
      remove: yes
   loop:
-    - {{ name: 'dvmelo', comment: 'Duarte Vieira de Melo' }}
-    - {{ name: 'pcardoso', comment: 'Pedro Cardoso - DBA'}}
-    - {{ name: 'lpsa', comment: 'Leonardo Sá - DBA' }} 
+    - { name: 'dvmelo', comment: 'Duarte Vieira de Melo' }
+    - { name: 'pcardoso', comment: 'Pedro Cardoso - DBA'}
+    - { name: 'lpsa', comment: 'Leonardo Sá - DBA' } 
   ignore_errors: true
   tags:
     - delete-user
@@ -20,12 +21,12 @@
      group: "wheel"
      shell: /bin/bash
      system: true
-     password: "{{ item.password }}"
+     password: "{{ item.password | password_hash('sha512')}}"
      comment: "{{ item.comment }}"
   loop:
-    - {{ name: 'dvmelo', comment: 'Duarte Vieira de Melo', password: 'qwe1234' }}
-    - {{ name: 'pcardoso', comment: 'Pedro Cardoso - DBA', password: 'qwe1234'}}
-    - {{ name: 'lpsa', comment: 'Leonardo Sá - DBA', password: 'qwe1234' }} 
+    - { name: 'dvmelo', comment: 'Duarte Vieira de Melo', password: 'qwe1234' }
+    - { name: 'pcardoso', comment: 'Pedro Cardoso - DBA', password: 'qwe1234'}
+    - { name: 'lpsa', comment: 'Leonardo Sá - DBA', password: 'qwe1234' }
   tags:
     - add-user
 ...
