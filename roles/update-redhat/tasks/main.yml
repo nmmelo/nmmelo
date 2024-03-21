@@ -3,9 +3,50 @@
 # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
 # https://4sysops.com/archives/ansible-yum-module-install-the-rhelcentos-packages/
-
 #https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html
+
 ---
+- name: Check /boot freespace
+  ansible.builtin.shell:
+   cmd: df /boot --output\=avail | tail -1
+   register: boot_freespace
+  when: ansible_facts['distribution'] == "OracleLinux" or ansible_distribution == 'Ubuntu'
+  #when: inventory_hostname == item.hostname
+  #with_items: "{{ server }}"
+  ##when: "{{ server|selectattr('hostname', 'in', inventory_hostname )}}"
+  tags:
+    - boot-size
+
+- name: Delete old kernel version
+  debug:
+    msg: /tmp does not have the minimum space required to continue (30 MB requested) "{{ boot_freespace.stdout }}"   
+  when: inventory_hostname == item.hostname
+  with_items: "{{ server }}"
+  #when: boot_freespace.stdout|float is lt 30000 and ansible_facts['distribution'] == "OracleLinux"
+  #failed_when: "'error' boot_freespace.stdout"
+  ignore_errors: true
+  tags:
+    - boot-size
+
+- name: Debian Patch - autoremove no longer needed dependencies
+  ansible.builtin.apt:
+    autoremove: true 
+  when: boot_freespace.stdout|float is lt 30000 and ansible_os_family == 'Debian'
+  ignore_errors: true
+
+- name: Debian Patch - autoclean the local package files 
+  ansible.builtin.apt:
+    autoclean: true
+  when: boot_freespace.stdout|float is lt 30000 and ansible_os_family == 'Debian'
+  ignore_errors: true
+
+- name: SISOP | Remove Old Kernel Version
+  include_tasks: remove-old-kernel.yml
+  when: boot_freespace.stdout|float is lt 30000 and ansible_facts['distribution'] == "OracleLinux"
+  ignore_errors: true
+  tags:
+    - boot-size
+
 - name: Update Redhat Distribution | By YUM
   ansible.builtin.yum:
      name: "*"

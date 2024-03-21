@@ -1,0 +1,19 @@
+server:
+  - hostname: "ansible-server"
+    ip: "192.168.56.102"
+    user: "adminssc"
+    software:
+      - soft: "ansible"
+      - rule: "git"
+  - hostname: "ansible-test1"
+    ip: "192.168.56.104"
+    user: "adminssc"
+    software:
+      - soft: "ansible"
+      - rule: "git"
+  - hostname: "ansible-test2"
+    ip: "192.168.56.105"
+    user: "adminssc"
+    software:
+      - soft: "ansible"
+      - rule: "git"
