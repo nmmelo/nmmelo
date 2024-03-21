@@ -5,6 +5,7 @@
      state: latest
   loop: "{{ packages }}"
   loop_control:
+    pause: 10
     label: "{{ item.name }}"
   when: ansible_facts['distribution'] == "OracleLinux" or ansible_facts['distribution'] == "CentOS"
 
@@ -14,6 +15,7 @@
      state: latest
   loop: "{{ packages }}"
   loop_control:
+    pause: 3
     label: "{{ item.name }}"
   when: ansible_distribution == 'Ubuntu'
 ...
