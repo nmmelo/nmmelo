@@ -11,8 +11,8 @@
    cmd: df /boot --output\=avail | tail -1
   register: boot_freespace
   when: ansible_facts['distribution'] == "OracleLinux" or ansible_distribution == 'Ubuntu'
-  #when: inventory_hostname == item.hostname
-  #with_items: "{{ server }}"
+  #loop: "{{ server }}"
+  #hen: inventory_hostname == item.hostname
   ##when: "{{ server|selectattr('hostname', 'in', inventory_hostname )}}"
   tags:
     - boot-size

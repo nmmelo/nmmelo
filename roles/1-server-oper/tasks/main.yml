@@ -3,6 +3,7 @@
 # https://www.redhat.com/sysadmin/automate-reboot-ansible
 # https://docs.ansible.com/ansible/latest/collections/community/general/shutdown_module.html - shutdown module
 # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_delegation.html#delegating-tasks
+# https://jinja.palletsprojects.com/en/3.1.x/templates/#builtin-filters
 
 ---
 - name: SISOP | Reboot Server

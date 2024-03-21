@@ -1,0 +1,4 @@
+ files:
+    - { src: 'file1.txt', dest: '/tmp/', owner: 'adminssc', mode: '640', group: 'adminssc' }
+    - { src: 'file2.txt', dest: '/tmp/', owner: 'adminssc', mode: '640', group: 'adminssc' }
+    - { src: 'file3.txt', dest: '/tmp/', owner: 'adminssc', mode: '640', group: 'adminssc' }

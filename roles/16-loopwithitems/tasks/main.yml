@@ -4,12 +4,12 @@
      src: "{{ item.src }}"
      dest: "{{ item.dest }}"
      owner: "{{ item.owner }}"
-     mode: "{{ item.mode }}"
+     mode: "{{ item.mode | default(omit) }}"
      group: "{{ item.group }}"
   register: lista
   with_items:
     - { src: 'file1.txt', dest: '/tmp/', owner: 'adminssc', mode: '640', group: 'adminssc' }
-    - { src: 'file2.txt', dest: '/tmp/', owner: 'adminssc', mode: '640', group: 'adminssc' }
+    - { src: 'file2.txt', dest: '/tmp/', owner: 'adminssc', group: 'adminssc' }
     - { src: 'file3.txt', dest: '/tmp/', owner: 'adminssc', mode: '640', group: 'adminssc' }
 
 - name: Debug Copy files
@@ -21,4 +21,12 @@
   ansible.builtin.ping:
   register: output_ping
   delegate_to: 127.0.0.1
+
+- name: Create multiple files
+  ansible.builtin.file:
+    path: "/tmp/files{{ outer_item }}.txt"
+    state: touch
+  loop: "{{ range(5, 10) }}"
+  loop_control:
+   loop_var: outer_item
 ...
