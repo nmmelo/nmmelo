@@ -1,0 +1,4 @@
+packages:
+   - name: vim
+   - name: net-tools
+   - name: unzip

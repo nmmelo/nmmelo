@@ -1,0 +1,19 @@
+---
+- name: SISOP | Install Packages by DNF
+  ansible.builtin.dnf:
+     name: "{{ item.name }}"
+     state: latest
+  loop: "{{ packages }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: ansible_facts['distribution'] == "OracleLinux" or ansible_facts['distribution'] == "CentOS"
+
+- name: SISOP | Install Packages by DNF
+  ansible.builtin.apt:
+     name: "{{ item.name }}"
+     state: latest
+  loop: "{{ packages }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: ansible_distribution == 'Ubuntu'
+...

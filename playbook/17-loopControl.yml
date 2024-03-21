@@ -1,0 +1,7 @@
+---
+- name: Ansible Loop with control
+  hosts: debian:redhat
+  become: true
+  roles:
+    - 17-loopControl
+...
