@@ -1,0 +1,24 @@
+---
+- name: SYSTEM | Copy files
+  ansible.builtin.copy:
+     src: "{{ item.src }}"
+     dest: "{{ item.dest }}"
+     owner: "{{ item.owner }}"
+     mode: "{{ item.mode }}"
+     group: "{{ item.group }}"
+  register: lista
+  with_items:
+    - { src: 'file1.txt', dest: '/tmp/', owner: 'adminssc', mode: '640', group: 'adminssc' }
+    - { src: 'file2.txt', dest: '/tmp/', owner: 'adminssc', mode: '640', group: 'adminssc' }
+    - { src: 'file3.txt', dest: '/tmp/', owner: 'adminssc', mode: '640', group: 'adminssc' }
+
+- name: Debug Copy files
+  ansible.builtin.debug:
+     var: "{{ item}}"
+  with_items: "{{ lista }}"
+
+- name: Example from an Ansible Playbook
+  ansible.builtin.ping:
+  register: output_ping
+  delegate_to: 127.0.0.1
+...

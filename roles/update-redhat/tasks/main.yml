@@ -9,7 +9,7 @@
 - name: Check /boot freespace
   ansible.builtin.shell:
    cmd: df /boot --output\=avail | tail -1
-   register: boot_freespace
+  register: boot_freespace
   when: ansible_facts['distribution'] == "OracleLinux" or ansible_distribution == 'Ubuntu'
   #when: inventory_hostname == item.hostname
   #with_items: "{{ server }}"
@@ -106,7 +106,6 @@
 - name: Upgrade All Debian | By APT
   ansible.builtin.apt:
     autoremove: true
-    #clean: true
     name: "*"
     state: latest
     update_cache: yes

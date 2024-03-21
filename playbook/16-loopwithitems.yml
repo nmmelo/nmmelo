@@ -1,0 +1,7 @@
+---
+- name: SISOP | Loop with items
+  hosts: redhat:debian
+  become: true
+  roles:
+    - 16-loopwithitems
+...
