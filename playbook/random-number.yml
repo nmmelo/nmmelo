@@ -1,0 +1,22 @@
+---
+- name: Test random filter
+  hosts: localhost
+  gather_facts: False
+  vars:
+   numero: "{{ ['1','2','3'] | random }}"
+  tasks:
+    - name: set fact here
+      set_fact:
+        randome_number: "{{ 3 | random }}"
+        other_fact:  "{{ ['1','2','3'] | random }}"
+      run_once: yes
+    - name: Print the random number
+      debug: var=randome_number
+    - name: Print the random number
+      debug: var=randome_number
+    - name: Print the random number
+      debug: var=other_fact
+    - name: Print the numero aleatorio
+      ansible.builtin.debug:
+        var: numero
+...
