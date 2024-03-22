@@ -23,6 +23,7 @@ redhat
 [linux:children]
 redhat
 debian
+redhats
 
 [server:children]
 redhat

@@ -1,6 +1,6 @@
 ---
 - name: Ansible with_sequence
-  hosts: debian:redhat
+  hosts: debian:!redhat
   become: true
   roles:
     - 19-sequence

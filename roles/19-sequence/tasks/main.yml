@@ -26,4 +26,24 @@
 - name: Debug delete user
   ansible.builtin.debug:
     msg: "{{ delete_user }}"
+
+- name: with_sequence -> loop
+  ansible.builtin.debug:
+    msg: "{{ 'testuser%02x' | format(item) }}"
+  loop: "{{ range(0, 4 + 2, 2)|list }}"
+  tags:
+    - teste
+
+- name: Ping all hosts
+  ansible.builtin.shell: ping -c 1 "{{ item }}"
+  loop: "{{ groups['linux'] }}"
+  tags:
+    - teste
+
+- name: Range Loop
+  debug:
+    msg: 192.168.1.{{ item }}
+  loop: "{{ range(0,256,2) | list }}"
+  tags:
+   - teste
 ...
