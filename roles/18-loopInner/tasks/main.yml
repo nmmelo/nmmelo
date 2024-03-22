@@ -1,0 +1,16 @@
+---
+- name: Loop with inner | include_task
+  include_tasks: inner.yml
+  loop:
+    - 1
+    - 2
+    - 3
+  register: output
+  loop_control:
+    loop_var: outer_item
+
+- name: Debug Loop with inner
+  ansible.builtin.debug:
+     msg: "{{ item.outer_item }}"
+  loop: "{{ output.results }}"
+...

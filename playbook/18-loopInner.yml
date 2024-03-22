@@ -1,0 +1,8 @@
+#https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_loops.html#defining-inner-and-outer-variable-names-with-loop-var
+---
+- name: Ansible Loop Inner
+  hosts: debian:redhat
+  become: true
+  roles:
+    - 18-loopInner
+...

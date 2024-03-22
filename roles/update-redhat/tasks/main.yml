@@ -4,6 +4,7 @@
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
 # https://4sysops.com/archives/ansible-yum-module-install-the-rhelcentos-packages/
 #https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html
+# https://earlruby.org/2019/07/rebooting-a-host-with-ansible/
 
 ---
 - name: Set ansible_facts
@@ -28,6 +29,7 @@
   ##when: "{{ server|selectattr('hostname', 'in', inventory_hostname )}}"
   tags:
     - boot-size
+    - update-server
 
 - name: Delete old kernel version
   debug:
@@ -43,21 +45,26 @@
 - name: Debian Patch - autoremove no longer needed dependencies
   ansible.builtin.apt:
     autoremove: true 
-  when: boot_freespace.stdout|float is lt 30000 and ansible_os_family == 'Debian'
+  when: boot_freespace.stdout|float is lt 30000 and (ansible_distribution in ["Ubuntu", "Debian"])
   ignore_errors: true
+  tags:
+    - update-server
 
 - name: Debian Patch - autoclean the local package files 
   ansible.builtin.apt:
     autoclean: true
-  when: boot_freespace.stdout|float is lt 30000 and ansible_os_family == 'Debian'
+  when: boot_freespace.stdout|float is lt 30000 and (ansible_distribution in ["Ubuntu", "Debian"])
   ignore_errors: true
+  tags:
+   - update-server
 
 - name: SISOP | Remove Old Kernel Version
   include_tasks: remove-old-kernel.yml
-  when: boot_freespace.stdout|float is lt 30000 and ansible_facts['distribution'] == "OracleLinux"
+  when: boot_freespace.stdout|float is lt 30000 and (ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"])
   ignore_errors: true
   tags:
     - boot-size
+    - update-server
 
 - name: Update Redhat Distribution | By YUM
   ansible.builtin.yum:
@@ -68,17 +75,20 @@
      bugfix: true #If set to true, and state=latest then only installs updates that have been marked bugfix related.
      security: false  #If set to true, and state=latest then only installs updates that have been marked security related.
   register: yum_output
-  when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
+  #when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
+  when: ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"]
   tags:
    - update-redhat
+   - update-server
 
 - name: Print output Update Redhat | Debug mode with var
   ansible.builtin.debug: 
    var: yum_output
-  when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat' and yum_output.rc != 0
+  when: ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"] and yum_output.rc != 0
   tags:
    - print-debug-output
    - update-redhat
+   - update-server
 
 - name: Update Kernel | By YUM
   ansible.builtin.yum:
@@ -87,7 +97,7 @@
     nobest: true
     update_only: yes
     update_cache: true
-  when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
+  when: ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"]
   tags:
    - update-redhat-kernel
 
@@ -95,14 +105,14 @@
   ansible.builtin.shell:
    cmd: yum update --nobest -y
   register: shell_output
-  when: ansible_facts['distribution'] == "OracleLinux" or ansible_facts['distribution'] == "CentOS"
+  when: ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"]
   tags:
    - update-redhat-shell
 
 - name: Print output Update by Shell
   ansible.builtin.debug: 
    var: shell_output
-  when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat' and yum_output.rc != 0 #shell_output.skipped != true
+  when: ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"] and yum_output.rc != 0 #shell_output.skipped != true
   tags:
    - update-redhat-shell
 
@@ -122,14 +132,26 @@
     state: latest
     update_cache: yes
   register: apt_output  
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution in ["Ubuntu", "Debian"]
   tags:
    - update-debian
+   - update-server
 
 - name: Print output of update Debian | Debug mode
   ansible.builtin.debug:
      msg: "{{ apt_output }}"
-  when: ansible_distribution == 'Ubuntu' and apt_output.changed != false
+  when: ansible_distribution in ["Ubuntu", "Debian"] and apt_output.changed 
   tags:
    - update-debian
+   - update-server
+
+- name: Reboot server
+  ansible.builtin.reboot:
+    msg: "Servidor {{ inventory_hostname }} - Reboot initiated by Ansible"
+    boot_time_command: uptime | cut -d ' ' -f 5
+    reboot_timeout: 800
+    test_command: uptime
+  when: yum_output.changed or apt_output.changed
+  tags:
+   - update-server
 ...

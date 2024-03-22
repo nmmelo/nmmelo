@@ -1,0 +1,9 @@
+---
+- name: Print outer and inner with item
+  ansible.builtin.debug:
+     msg: "outer item={{ outer_item }}, inner item={{ item }}"
+  loop:
+   - a
+   - b
+   - c
+...

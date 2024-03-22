@@ -1,0 +1,29 @@
+# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_loops.html#with-sequence
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
+# https://developers.redhat.com/articles/2023/10/11/how-ansible-automates-linux-server-user-and-group-management#how_to_automate_user_group_management
+
+---
+- name: USER | Add user
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: present
+    password: "{{ password | password_hash('sha512') }}"
+  register: create_user
+  with_sequence: start=0 end=10 format=user%x
+
+- name: Debug add user
+  ansible.builtin.debug:
+    msg: "{{ create_user }}"
+
+- name: USER | Delete user
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: absent
+    remove: true
+  register: delete_user
+  with_sequence: start=0 end=10 format=user%x
+
+- name: Debug delete user
+  ansible.builtin.debug:
+    msg: "{{ delete_user }}"
+...
