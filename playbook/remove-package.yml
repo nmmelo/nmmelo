@@ -1,0 +1,16 @@
+---
+- name: Ansible | Add/Remove Package
+  hosts: redhat
+  become: true
+  vars_prompt:
+     - name: myoperation
+       prompt: Qual operação a realizar [add/remove]?
+       private: false
+       default: add
+     - name: mypackage
+       prompt: Qual o Package?
+       private: false
+       default: 0
+  roles:
+    - remove-package
+...

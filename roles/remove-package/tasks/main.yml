@@ -1,0 +1,31 @@
+---
+- name: remove package {{ mypackage }}
+  ansible.builtin.package:
+    name: "{{ mypackage }}"
+    state: absent
+  register: package_output
+  when: myoperation == 'remove' and mypackage != 0
+
+- name: Debug | Remove Package {{ mypackage }}
+  ansible.builtin.debug:
+    msg: "{{ package_output}} - {{ mypackage }}"
+  when: myoperation == 'remove' and not package_output.failed
+
+- name: Add package {{ mypackage }}
+  ansible.builtin.package:
+    name: "{{ mypackage }}"
+    state: present
+  register: package_output
+  when: myoperation == 'add' and mypackage != 0
+
+- name: Debug | Remove Package {{ mypackage }}
+  ansible.builtin.debug:
+    msg: "{{ package_output}} - {{ mypackage }}"
+  when: myoperation == 'add' and not package_output.failed
+
+- name: "{{ mypackage }} service enabled"
+  ansible.builtin.service:
+    name: "{{ mypackage }}"
+    enabled: true
+    state: started
+...
