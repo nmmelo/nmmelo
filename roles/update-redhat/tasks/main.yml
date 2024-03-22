@@ -6,6 +6,18 @@
 #https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html
 
 ---
+- name: Set ansible_facts
+  ansible.builtin.set_fact:
+    files_dicts: "{{ server }}"
+  tags:
+    - teste
+
+- name: Delete old kernel version
+  debug:
+    msg: "{{ files_dicts }}"
+  tags:
+    - teste
+
 - name: Check /boot freespace
   ansible.builtin.shell:
    cmd: df /boot --output\=avail | tail -1
