@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ipset type="hash:net">
+{% for entry in ipset_rule.entries %}
+  <entry>{{ entry }}</entry>
+{% endfor %}
+</ipset>

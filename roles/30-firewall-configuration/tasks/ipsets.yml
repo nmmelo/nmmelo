@@ -1,0 +1,69 @@
+---
+- name: Install firewall Services - Ubuntu
+  ansible.builtin.apt:
+    name: firewalld
+    state: present
+    update_cache: yes
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+  when: ansible_os_family == "Debian"
+  
+- name: Add new firewalld zone
+  firewalld:
+    zone: "{{ server.zone }}"
+    permanent: yes
+    state: present
+  #ignore_errors: yes
+
+# For debugging
+# - name: Create IPSets
+#   debug: msg={{ ipset_name.name }}
+#   with_items: "{{ server.ipset_rules }}"
+#   loop_control:
+#     loop_var: ipset_name
+
+- name: Create IPSet Groups for all servers
+  include_tasks: groups.yml 
+  vars:
+    ipset_group: "{{ ipset_group_loop }}"
+  with_items: "{{ server.ipset_rules }}"
+  loop_control:
+    loop_var: ipset_group_loop
+
+- name: Create IPSet Entries for all servers
+  include_tasks: entries.yml
+  vars:
+    ipset_rule: "{{ ipset }}"
+  with_items: "{{ server.ipset_rules }}"
+  loop_control:
+    loop_var: ipset
+
+# - name: Print rich rules
+#   debug: msg={{ rules.rule }}
+#   with_items: "{{ server.rich_rules }}"
+#   loop_control:
+#     loop_var: rules
+
+- name: Add rich rule to oracle-zone
+  firewalld:
+    zone: "{{ server.zone }}"
+    rich_rule: "{{ rules.rule }}"
+    permanent: yes
+    state: enabled
+  with_items: "{{ server.rich_rules }}"
+  loop_control:
+    loop_var: rules
+
+- name: Add interface to the oracle-zone
+  firewalld:
+    zone: "{{ server.zone }}"
+    interface: "{{ server.interface }}"
+    permanent: yes
+    state: enabled
+
+- name: Reload firewall rules
+  systemd:
+    name: firewalld
+    state: reloaded
+...

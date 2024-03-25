@@ -1,0 +1,29 @@
+---
+# - name: Delete IPSets groups 
+#   command: firewall-cmd --permanent --delete-ipset={{ ipset_name.name }} --type=hash:net
+#   ignore_errors: true
+#   become: yes
+#   become_user: root
+#   with_items: "{{ database.ipset_rules }}"
+#   loop_control:
+#     loop_var: ipset_name
+
+- name: Check if IPSet group exists
+  shell: firewall-cmd --permanent --get-ipsets | grep  -o "{{ ipset_group.name }}"
+  register: ipset_exists
+  ignore_errors: true  # Ignore errors, so it doesn't fail when the IPSet doesn't exist
+
+#- name: debug Create IPSets groups
+#  debug:
+#    msg: "{{ ipset_exists }}"
+
+- name: Create IPSets groups 
+  command: firewall-cmd --permanent --new-ipset={{ ipset_group.name }} --type=hash:net
+  become: true
+  when: ipset_exists.rc != 0 # Only execute this task if the previous task failed
+
+# - name: Reload firewalld
+#   command: firewall-cmd --reload
+#   become: yes
+#   when: ipset_exists.rc != 0  # Only execute this task if the first task failed
+...

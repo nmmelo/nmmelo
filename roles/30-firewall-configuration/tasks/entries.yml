@@ -1,0 +1,12 @@
+---
+- name: Add entry to IPSet
+  template:
+    src: ipset.xml.j2
+    dest: /etc/firewalld/ipsets/{{ ipset_rule.name }}.xml
+    owner: root
+    group: root
+    mode: '0644' 
+    backup: yes
+  become: true
+  become_user: root
+...

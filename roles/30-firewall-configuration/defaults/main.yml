@@ -1,0 +1,153 @@
+http_proxy: "http://localhost:8080/"
+https_proxy: "http://localhost:8080/"
+ipset_folder: /etc/firewalld/ipsets
+databases:
+servers:
+  - hostname: "ansible-server"
+    interface: "ens192"
+    zone: "services-zone"
+    rich_rules:
+      - rule: "rule family=ipv4 source ipset='ipset-https' port port=443 protocol=tcp  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-ssh' service name=ssh  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-ntp' port  port=123 protocol=udp  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-zabbix' port  port=10050 protocol=tcp  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-icmp' protocol value='icmp' accept"
+      - rule: "rule family=ipv4 source ipset='ipset-samba' service name=samba  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-tomcats' port  port=8443 protocol=tcp  accept"
+      #- rule: "rule family=ipv4 source address='0.0.0.0/0' service name=https accept"
+    ipset_rules:
+      - name: "ipset-ssh"
+        entries:
+          - "192.168.56.1" # localhost
+          - "192.168.56.102" # ansible-server
+          - "192.168.56.104" # ansible-test1
+          - "192.168.56.105" # ansible-test2
+      - name: "ipset-ntp"
+        entries:
+          - "192.168.56.102" # fansible-server
+      - name: "ipset-https"
+        entries:
+          - "192.0.0.0/10"  # 
+      - name: "ipset-tomcats"
+        entries:
+          - "192.0.0.0/10"  # 
+      - name: "ipset-zabbix"
+        entries:
+          - "192.168.56.102" # zabbix
+      - name: "ipset-icmp"
+        entries:
+          - "192.168.56.102" # zabbix
+      - name: "ipset-samba"
+        entries:
+         - "192.168.56.102" # teste
+
+  - hostname: "ansible-test1"
+    interface: "ens160"
+    zone: "services-zone"
+    rich_rules:
+      - rule: "rule family=ipv4 source ipset='ipset-https' port port=443 protocol=tcp  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-ssh' service name=ssh  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-ntp' port  port=123 protocol=udp  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-zabbix' port  port=10050 protocol=tcp  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-icmp' protocol value='icmp' accept"
+      - rule: "rule family=ipv4 source ipset='ipset-samba' service name=samba  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-tomcats' port  port=8443 protocol=tcp  accept"
+      #- rule: "rule family=ipv4 source address='0.0.0.0/0' service name=https accept"
+    ipset_rules:
+      - name: "ipset-ssh"
+        entries:
+          - "192.168.56.1" # localhost
+          - "192.168.56.102" # ansible-server
+          - "192.168.56.104" # ansible-test1
+          - "192.168.56.105" # ansible-test2
+      - name: "ipset-ntp"
+        entries:
+          - "192.168.56.102" # fansible-server
+      - name: "ipset-https"
+        entries:
+          - "192.0.0.0/10"  # 
+      - name: "ipset-tomcats"
+        entries:
+          - "192.0.0.0/10"  # 
+      - name: "ipset-zabbix"
+        entries:
+          - "192.168.56.102" # zabbix
+      - name: "ipset-icmp"
+        entries:
+          - "192.168.56.102" # zabbix
+      - name: "ipset-samba"
+        entries:
+         - "192.168.56.102" # teste
+
+  - hostname: "ansible-test2"
+    interface: "ens160"
+    zone: "services-zone"
+    rich_rules:
+      - rule: "rule family=ipv4 source ipset='ipset-mysql' service name=mysql  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-ssh' service name=ssh  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-ntp' port  port=123 protocol=udp  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-zabbix' port  port=10050 protocol=tcp  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-icmp' protocol value='icmp' accept"
+      - rule: "rule family=ipv4 source address='0.0.0.0/0' service name=https accept"
+    ipset_rules:
+      - name: "ipset-ssh"
+        entries:
+          - "192.168.56.1" # localhost
+          - "192.168.56.102" # ansible-server
+          - "192.168.56.104" # ansible-test1
+          - "192.168.56.105" # ansible-test2
+          - "192.168.56.168" # mac
+      - name: "ipset-ntp"
+        entries:
+          - "192.168.56.102" # fansible-server
+      - name: "ipset-https"
+        entries:
+          - "192.0.0.0/10"  # 
+      - name: "ipset-tomcats"
+        entries:
+          - "192.0.0.0/10"  # 
+      - name: "ipset-zabbix"
+        entries:
+          - "192.168.56.102" # zabbix
+      - name: "ipset-icmp"
+        entries:
+          - "192.168.56.102" # zabbix
+      - name: "ipset-samba"
+        entries:
+         - "192.168.56.102" # teste
+
+  - hostname: "mac"
+    interface: "ens160"
+    zone: "services-zone"
+    rich_rules:
+      - rule: "rule family=ipv4 source ipset='ipset-https' port port=443 protocol=tcp  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-ssh' service name=ssh  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-ntp' port  port=123 protocol=udp  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-zabbix' port  port=10050 protocol=tcp  accept"
+      - rule: "rule family=ipv4 source ipset='ipset-icmp' protocol value='icmp' accept"
+    ipset_rules:
+      - name: "ipset-ssh"
+        entries:
+          - "192.168.56.1" # localhost
+          - "192.168.56.102" # ansible-server
+          - "192.168.56.104" # ansible-test1
+          - "192.168.56.105" # ansible-test2
+          - "192.168.56.168" # mac
+      - name: "ipset-ntp"
+        entries:
+          - "192.168.56.102" # fansible-server
+      - name: "ipset-https"
+        entries:
+          - "192.0.0.0/10"  # 
+      - name: "ipset-tomcats"
+        entries:
+          - "192.0.0.0/10"  # 
+      - name: "ipset-zabbix"
+        entries:
+          - "192.168.56.102" # zabbix
+      - name: "ipset-icmp"
+        entries:
+          - "192.168.56.102" # zabbix
+      - name: "ipset-samba"
+        entries:
+         - "192.168.56.102" # teste

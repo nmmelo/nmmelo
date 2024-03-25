@@ -1,0 +1,33 @@
+---
+- name: Create IPSet Entries for all servers
+  include_tasks: ipsets.yml 
+  vars:
+    server: "{{ item }}"
+  when: inventory_hostname == item.hostname
+  with_items: "{{ servers }}"
+
+- name: SISOP | Stat 
+  ansible.builtin.stat: 
+    path: "{{ ipset_folder }}/"
+  register: find
+      
+- name: SISOP | Find ipset xml files
+  ansible.builtin.find:
+    paths: "{{ ipset_folder}}"
+    patterns: "*@*"
+    age: 30d
+    recurse:  yes
+  register: find_results
+  when: find.stat.exists
+    
+
+- name: SISOP | Remove old Backup IPSET FILES
+  ansible.builtin.file:
+     path: "{{ item['path'] }}"
+     state: absent
+  with_items: "{{ find_results['files'] }}"
+  when: find_results.files != 0
+  ignore_errors: true
+  tags:
+    - remove-files
+...
