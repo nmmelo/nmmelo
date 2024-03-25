@@ -16,12 +16,14 @@
     name: "{{ mypackage }}"
     state: present
   register: package_output
+  ignore_errors: true
   when: myoperation == 'add' and mypackage != 0
 
 - name: Debug | Remove Package {{ mypackage }}
   ansible.builtin.debug:
     msg: "{{ package_output}} - {{ mypackage }}"
   when: myoperation == 'add' and not package_output.failed
+  ignore_errors: true
 
 - name: "{{ mypackage }} service enabled"
   ansible.builtin.service:
@@ -29,4 +31,5 @@
     enabled: true
     state: started
   when: myoperation == 'add' and mypackage != 0
+  ignore_errors: true
 ...
