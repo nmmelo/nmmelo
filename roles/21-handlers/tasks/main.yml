@@ -1,0 +1,17 @@
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/replace_module.html
+# https://prathapreddy-mudium.medium.com/ansible-replace-module-c8ec77e0b400
+---
+  - name: SISOP | NGINX - change Listener
+    ansible.builtin.replace:
+      dest: /etc/nginx/nginx.conf
+      regexp: "listen 80 default_server;"
+      replace: "listen {{ ansible_all_ipv4_addresses[1] }}:80 default_server;"
+    register: output
+    notify: restart nginx
+    ignore_errors: true
+
+  - name: Debug NGINX
+    ansible.builtin.debug:
+      msg: "{{ output }}"
+    ignore_errors: true
+...

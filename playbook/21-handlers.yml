@@ -1,0 +1,7 @@
+---
+- name: Ansible Handlers
+  hosts: redhat
+  become: true
+  roles:
+    - 21-handlers
+...

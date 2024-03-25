@@ -1,0 +1,12 @@
+- name: SISOP | Restart NGINX
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+  listen: restart nginx
+
+- name: Restart NGINX 2
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
+    enabled: yes   

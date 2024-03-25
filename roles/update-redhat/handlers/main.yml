@@ -1,0 +1,9 @@
+- name: Reboot server
+  ansible.builtin.reboot:
+    msg: "Servidor {{ inventory_hostname }} - Reboot initiated by Ansible"
+    boot_time_command: uptime | cut -d ' ' -f 5
+    reboot_timeout: 800
+    test_command: uptime
+  listen: reboot server
+  tags:
+   - update-server

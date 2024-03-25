@@ -5,11 +5,11 @@
   tags:
     - boot-size2
 
-- name: Debug
-  ansible.builtin.debug:
-    msg: "{{ installed_kernels }}"
-  tags:
-    - boot-2
+#- name: Debug
+#  ansible.builtin.debug:
+#    msg: "{{ installed_kernels }}"
+#  tags:
+#    - boot-2
 
 - name: Get the current running kernel
   ansible.builtin.command: "uname -r"
@@ -22,11 +22,13 @@
     kernels_to_keep: 2
   tags:
     - boot-size2
+
 - name: Filter out the current and the latest kernels
   set_fact:
     old_kernels: "{{ installed_kernels.stdout_lines | difference([current_kernel.stdout]) | reverse | slice(kernels_to_keep)|list }}"
   tags:
-    - boot-size2    
+    - boot-size2
+
 - name: Remove old kernels
   ansible.builtin.yum:
       name: "kernel-{{ item }}"
@@ -39,14 +41,15 @@
 - name: Remove old kernels
   ansible.builtin.shell:
      cmd: dnf remove --oldinstallonly --setopt installonly_limit=2 kernel -y
-     become: true
-  register: output-dnf
+  become: true
+  register: output_dnf
+  ignore_errors: true
   tags:
    - boot-size
 
-- name: Debug Remove old Kernels
-  ansible.builtin.debug:
-    msg: "{{ installed_kernels }}"
-  tags:
-    - boot-size
+#- name: Debug Remove old Kernels
+#  ansible.builtin.debug:
+#    msg: "{{ installed_kernels }}"
+#  tags:
+#    - boot-size
 ...
