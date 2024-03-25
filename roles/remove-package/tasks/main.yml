@@ -28,4 +28,5 @@
     name: "{{ mypackage }}"
     enabled: true
     state: started
+  when: myoperation == 'add' and mypackage != 0
 ...
