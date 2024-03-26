@@ -1,6 +1,6 @@
 ---
 - name: SISOP | Configure firewalld on Linux Server
-  hosts: debian:redhat
+  hosts: debian:!redhat
   become: true
   roles:
     - 30-firewall-configuration
