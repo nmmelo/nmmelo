@@ -1,5 +1,10 @@
 ---
 # vars file for 23-temp
+ssh_port: 22
+ssh_protocol: 2
+ssh_user: adminssc
+security_ssh_allowed_users: [adminssc, git]
+ssh_root_login: "no"
 http_proxy: "http://192.168.56.105:3128/"
 https_proxy: "http://192.168.56.105:3128/"
 packages:

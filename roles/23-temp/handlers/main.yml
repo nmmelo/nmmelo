@@ -1,2 +1,16 @@
 ---
 # handlers file for 23-temp
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_service_module.html#ansible-collections-ansible-builtin-systemd-service-module
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_module.html
+- name: SYSTEMD | Restart sshd
+  ansible.builtin.systemd:
+     name: sshd
+     state: restarted
+  listen: Restart sshd systemd
+
+- name: Service | Restart sshd
+  ansible.builtin.service:
+     name: sshd
+     state: restarted
+  listen: Restart sshd service
+...

@@ -1,6 +1,10 @@
 ---
 # tasks file for 23-temp
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html
+- name: SISOP | Set facts
+  ansible.builtin.set_fact: 
+
 - name:  DNF | Install {{ packages }}
   ansible.builtin.dnf:
     name: "{{ packages }}"
@@ -31,5 +35,43 @@
   tags:
     - copy-files
 
+- name: SYSTEM | Download and Extract file
+  ansible.builtin.unarchive:
+     src: https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.6.4/npp.8.6.4.portable.x64.zip
+     dest: /tmp
+     owner: "adminssc"
+     remote_src: yes
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+  ignore_errors: true
+  tags:
+    - copy-files
+- name: SYSTEM | Download a file
+  ansible.builtin.get_url:
+      url: "https://www.emfa.pt/paginas/fap/ficheiros/noticias/2024/03/modernizacaop3c.jpg"
+      dest: /tmp
+      mode: '0440'
+      owner: "adminssc"
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+  ignore_errors: true
+  tags:
+   - copy-files
+
+# https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_templating.html
+- name: SSHD | Copy sshd_config template
+  ansible.builtin.template:
+      src: sshd_config.j2
+      dest: /etc/ssh/sshd_config
+      owner: root
+      group: root
+      mode: 0644
+      backup: yes
+  notify: Restart sshd service
+  when: ansible_distribution in ["Ubuntu", "Debian"]
+  tags:
+    - sshd-restart
 ...
 
