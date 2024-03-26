@@ -1,0 +1,7 @@
+---
+- name: Service | Install NGINX
+  hosts: redhat
+  become: true
+  roles:
+    - nginx
+...

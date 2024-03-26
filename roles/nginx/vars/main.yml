@@ -1,0 +1,5 @@
+---
+# vars file for nginx
+http_proxy: "http://192.168.56.105:3128/"
+https_proxy: "http://192.168.56.105:3128/"
+...
