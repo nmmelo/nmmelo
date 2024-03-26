@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+- tasks:
+    - name: Execute table.sql using sqlplus 
+      shell: $ORACLE_HOME/bin/sqlplus -s username/password@connect @table.sql
+      environment:
+        ORACLE_HOME: "{{oracle_home_path}}"
+        LD_LIBRARY_PATH: "{{ld_library_path}}"
+        PATH: "{{bin_path}}"
+      args:
+        chdir: "{{sql_path}}" 
+      become: true
+      become_method: su
+      become_user: oracle
