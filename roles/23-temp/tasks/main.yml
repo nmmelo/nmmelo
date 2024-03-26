@@ -1,5 +1,6 @@
 ---
 # tasks file for 23-temp
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html
 - name:  DNF | Install {{ packages }}
   ansible.builtin.dnf:
     name: "{{ packages }}"
@@ -8,5 +9,27 @@
     http_proxy: "{{ http_proxy }}"
     https_proxy: "{{ https_proxy }}"
   when: ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"]
+  tags:
+   - install-packages
+
+- name: SYSTEM | copy files
+  ansible.builtin.copy:
+     src: "{{ item.src }}"
+     dest: "{{ item.dest }}"
+  with_items: 
+    - { src: 'file1.conf', dest: '/tmp/file1.conf'}
+    - { src: 'file2.conf', dest: '/tmp/file2.conf'}
+    - { src: 'file3.conf', dest: '/tmp/file3.conf'}
+  tags:
+   - copy-files 
+
+- name: SYSTEM | Extract file
+  ansible.builtin.unarchive:
+     src: files.tar.gz
+     dest: /tmp
+     owner: "adminssc"
+  tags:
+    - copy-files
+
 ...
 
