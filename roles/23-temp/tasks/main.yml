@@ -1,0 +1,12 @@
+---
+# tasks file for 23-temp
+- name:  DNF | Install {{ packages }}
+  ansible.builtin.dnf:
+    name: "{{ packages }}"
+    state: latest
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+  when: ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"]
+...
+

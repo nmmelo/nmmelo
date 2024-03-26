@@ -1,0 +1,7 @@
+---
+- name: Ansible Temp Playbook for tests
+  hosts: debian:redhat
+  become: true
+  roles:
+    - 23-temp
+...
