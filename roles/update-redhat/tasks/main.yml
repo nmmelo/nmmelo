@@ -74,6 +74,9 @@
      nobest: true # Set best option to False, so that transactions are not limited to best candidates only.
      bugfix: true #If set to true, and state=latest then only installs updates that have been marked bugfix related.
      security: false  #If set to true, and state=latest then only installs updates that have been marked security related.
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
   register: yum_output
   #when: ansible_distribution == 'CentOS' or ansible_os_family == 'RedHat'
   notify: reboot server
@@ -98,6 +101,9 @@
     nobest: true
     update_only: yes
     update_cache: true
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
   when: ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"]
   tags:
    - update-redhat-kernel
@@ -105,6 +111,9 @@
 - name: Update All Packages | By Shell
   ansible.builtin.shell:
    cmd: yum update --nobest -y
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
   register: shell_output
   when: ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"]
   tags:
@@ -132,6 +141,9 @@
     name: "*"
     state: latest
     update_cache: yes
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
   register: apt_output
   notify: reboot server  
   when: ansible_distribution in ["Ubuntu", "Debian"]

@@ -1,10 +1,10 @@
-http_proxy: "http://localhost:8080/"
-https_proxy: "http://localhost:8080/"
+http_proxy: "http://192.168.56.105:3128/"
+https_proxy: "http://192.168.56.105:3128/"
 ipset_folder: /etc/firewalld/ipsets
 databases:
 servers:
   - hostname: "ansible-server"
-    interface: "ens192"
+    interface: "enp0s8"
     zone: "services-zone"
     rich_rules:
       - rule: "rule family=ipv4 source ipset='ipset-https' port port=443 protocol=tcp  accept"
@@ -80,7 +80,7 @@ servers:
          - "192.168.56.102" # teste
 
   - hostname: "ansible-test2"
-    interface: "ens160"
+    interface: "enp0s8"
     zone: "services-zone"
     rich_rules:
       - rule: "rule family=ipv4 source ipset='ipset-mysql' service name=mysql  accept"
@@ -89,6 +89,7 @@ servers:
       - rule: "rule family=ipv4 source ipset='ipset-zabbix' port  port=10050 protocol=tcp  accept"
       - rule: "rule family=ipv4 source ipset='ipset-icmp' protocol value='icmp' accept"
       - rule: "rule family=ipv4 source address='0.0.0.0/0' service name=https accept"
+      - rule: "rule family=ipv4 source ipset='ipset-squid' port  port=3128 protocol=tcp  accept"
     ipset_rules:
       - name: "ipset-ssh"
         entries:
@@ -97,6 +98,10 @@ servers:
           - "192.168.56.104" # ansible-test1
           - "192.168.56.105" # ansible-test2
           - "192.168.56.168" # mac
+      - name: "ipset-squid"
+        entries:
+          - "192.168.56.102" # ansible-server
+          - "192.168.56.104" # ansible-test1
       - name: "ipset-ntp"
         entries:
           - "192.168.56.102" # fansible-server
