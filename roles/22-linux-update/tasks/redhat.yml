@@ -1,0 +1,11 @@
+---
+- name: DNF | Update Systems
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: yes
+  #environment:
+    #http_proxy: "{{ http_proxy }}"
+    #https_proxy: "{{ https_proxy }}"
+  #when: ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"]
+...
