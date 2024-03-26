@@ -1,0 +1,7 @@
+---
+- name: Ansible | Linux Update
+  hosts: debian:redhat
+  become: true
+  roles:
+    - 22-linux-update
+...
