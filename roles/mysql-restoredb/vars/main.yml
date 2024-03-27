@@ -1,0 +1,4 @@
+---
+# vars file for mysql-restoredb
+dir_backups: /mnt/backups
+...

@@ -1,0 +1,37 @@
+---
+- name: SYSTEM | Download a file {{ db_url_filename }}
+  ansible.builtin.get_url:
+      url: "{{ db_example_url }}"
+      dest: /tmp/test_db-master.zip
+      mode: '0644'
+      owner: "root"
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+  ignore_errors: true
+  tags:
+    - download-files
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html
+- name: SYSTEM | Extract file {{ db_url_filename }}
+  ansible.builtin.unarchive:
+     src: /tmp/test_db-master.zip
+     dest: /tmp
+     owner: "root"
+     remote_src: yes
+  ignore_errors: true
+  notify: delete files
+  tags:
+    - download-files
+
+- name: SYSTEM | change employees sql file
+  ansible.builtin.lineinfile:
+      path: /tmp/test_db-master/employees.sql
+      search_string: 'USE employees;'
+      insertafter: 'USE employees;'
+      line: 'set storage_engine = InnoDB;'
+      #replace: "set storage_engine = InnoDB;"
+  ignore_errors: true
+  tags:
+    - download-files
+...

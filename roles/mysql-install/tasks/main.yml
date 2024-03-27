@@ -1,0 +1,105 @@
+---
+# tasks file for mysql-install
+# https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_db_module.html
+# https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_user_module.html
+
+- name: SYSTEM | Installing Mysql Server by APT
+  import_tasks: debian.yml
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+  when: ansible_distribution in ['Debian','Ubuntu']
+  notify: Restart Mysql Server
+
+- name: SYSTEM | Installing Mysql Server by YUM
+  import_tasks: redhat.yml
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+  when: ansible_distribution in ['OracleLinux','CentOS']
+  notify: Restart Mysql Server
+
+- name: SYSTEM | start and enable mysql Service
+  ansible.builtin.service:
+    name: mysql
+    state: started
+    enabled: yes
+  ignore_errors: true
+
+- name: MYSQL | Changed the root password
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    user: root
+    check_implicit_admin: true
+    column_case_sensitive: true
+    password: "{{ mysql_root_password }}"
+    host: localhost
+  ignore_errors: true
+
+- name: MYSQL | Remove remote root
+  community.mysql.mysql_user:
+    check_implicit_admin: true
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    user: root
+    host: "{{ ansible_fqdn }}"
+    state: absent
+  ignore_errors: true
+
+
+- name: MYSQL | Creating mysql user {{ db_user }}
+  community.mysql.mysql_user:
+    column_case_sensitive: true
+    login_user: root
+    login_password: "{{ mysql_root_password | password_hash}}"
+    name: "{{ db_user }}"
+    password: "{{ db_pass | password_hash }}"
+    priv: '*.*:ALL'
+    host: '%'
+    state: present
+  ignore_errors: true
+  tags:
+   - create-user-teste
+
+- name: MYSQL | Creating {{ db_name }} database
+  community.mysql.mysql_db:
+    name: "{{ db_name }}"
+    state: present
+  ignore_errors: true
+ 
+- name: SYSTEM | Download and Extracting the Database
+  import_tasks: import.yml
+  tags:
+   - download-files
+   - create-db-employees
+
+- name: MYSQL | Create mysql database
+  mysql_db:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: "{{ db_user_1 }}"
+    state: present 
+  ignore_errors: true
+  tags:
+    - create-db-employees
+
+- name: MYSQL | Creating {{ db_user_1 }} database
+  community.mysql.mysql_db:
+    name: "{{ db_user_1 }}"
+    state: import
+    force: true
+    target: /tmp/test_db-master/employees.sql
+  ignore_errors: true
+  tags:
+    - create-db-employees
+
+- name: Enable remote login to mysql
+  ansible.builtin.lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
+    backup: yes
+  ignore_errors: true
+  notify:
+    - Restart Mysql Server
+...

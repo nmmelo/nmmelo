@@ -1,0 +1,13 @@
+---
+- name: YUM | Installing Mysql and dependencies
+  ansible.builtin.yum:
+     name: "{{ item }}"
+     state: present
+     update_cache: yes
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+  with_items: "{{ package }}"
+  tags:
+   - apt-mysql
+...

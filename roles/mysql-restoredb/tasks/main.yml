@@ -1,0 +1,52 @@
+---
+# tasks file for mysql-restoredb
+- name: SYSTEM | Finding DB {{ dbname }}
+  ansible.builtin.find:
+    paths: "{{ dir_backups}}"
+    patterns: "{{ dbname }}-{{ time }}.sql.gz"
+    recurse: no
+    file_type: file
+  register: finddb
+  delegate_to: debian
+
+- name: SYSTEM | Database {{ dbname }} not found
+  ansible.builtin.meta: end_play
+  when: finddb.files == []
+
+- name: SYSTEM | Check file
+  ansible.builtin.set_fact:
+    dbfilename: "{{ finddb.files[0].path }}"
+  when: finddb.files != []
+
+- name: SYSTEM | Coping backup file {{ dbname }}-{{ time }}.sql.gz
+  ansible.posix.synchronize:
+    mode: push
+    src: "{{ dir_backups}}/{{ dbname }}-{{ time }}.sql.gz"
+    dest: /tmp/
+  delegate_to: debian
+
+- name: MYSQL | Restoring database {{ dbname }}
+  community.mysql.mysql_db:
+    name: "{{ dbname }}"
+    state: import
+    login_user: root
+    login_password: "Senha123"
+    target: "/tmp/{{ dbname }}-{{ time }}.sql.gz"
+
+- name: MYSQL | Checking restore
+  community.mysql.mysql_query:
+    login_user: root
+    login_password: "Senha123"
+    login_db: "{{ dbname }}"
+    query: SELECT * FROM users
+  register: query
+
+- name: SYSTEM | Show MySQL Query
+  debug:
+    msg: "{{ query }}"
+
+- name: SYSTEM | Removing database file {{ dbname }}-{{ time }}.sql.gz
+  ansible.builtin.file:
+    name: "/tmp/{{ dbname }}-{{ time }}.sql.gz"
+    state: absent
+...

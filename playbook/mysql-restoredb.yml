@@ -1,0 +1,7 @@
+---
+- name: Ansible | Mysql Restore database
+  hosts: redhat
+  become: true
+  roles:
+    - mysql-restoredb
+...

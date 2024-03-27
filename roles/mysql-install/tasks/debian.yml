@@ -1,0 +1,34 @@
+---
+- name: APT | Update update_cache
+  ansible.builtin.apt:
+    update_cache: yes
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+  #when: ansible_distribution in ["Ubuntu", "Debian"]
+  tags:
+   - apt-mysql
+
+- name: APT | Update Systems
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+  tags:
+   - apt-mysql
+
+- name: APT | Installing Mysql and dependencies
+  ansible.builtin.apt:
+     name: "{{ item }}"
+     state: present
+     update_cache: yes
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+  with_items: "{{ package }}"
+  ignore_errors: true
+  tags:
+   - apt-mysql
+...

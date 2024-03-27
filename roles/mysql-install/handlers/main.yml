@@ -1,0 +1,18 @@
+---
+# handlers file for mysql-install
+- name: SYSTEM | Restart Mysql Server
+  ansible.builtin.service:
+      name: mysql
+      state: restarted
+  ignore_errors: true
+  listen: Restart Mysql Server
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+- name: SYSTEM | Delete {{ db_url_filename }} files
+  ansible.builtin.file:
+    path: "/tmp/{{ db_url_filename }}"
+    state: absent
+  listen: delete files
+  tags:
+    - download-files
+...

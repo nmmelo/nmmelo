@@ -1,0 +1,25 @@
+---
+# https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_db_module.html
+# https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_user_module.html
+# vars file for mysql-install
+http_proxy: "http://192.168.56.105:3128/"
+https_proxy: "http://192.168.56.105:3128/"
+package:
+ # - mariadb-server
+ # - python3-PyMySQL
+ #- mariadb-client
+ # - mariadb-common
+ # - MySQL-python
+  - mysql-server
+  - mysql-client 
+  - python3-mysqldb
+  - libmysqlclient-dev
+mysql_root_password: "Password1"
+db_user: teste_post
+db_pass: teste123
+db_name: teste_db
+db_folder: /tmp
+db_example_url: "https://codeload.github.com/datacharmer/test_db/zip/refs/heads/master"
+db_url_filename: "test_db-master.zip"
+db_user_1: employees
+...
