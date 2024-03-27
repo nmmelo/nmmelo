@@ -1,38 +1,57 @@
-Role Name
-=========
+# Nginx Community Edition
 
-A brief description of the role goes here.
+This Ansible Role is used for install [Nginx Community Edition](https://www.nginx.com/resources/wiki/community/) in the lastest version, using sample config files created
+by pH Consultoria.
+<br>
+<br>
+
+[![Terraform Version](https://img.shields.io/badge/ansible-7.3.0%20+-623CE4.svg?logo=ansible)](https://github.com/ansible/ansible)
+[![Owner](https://img.shields.io/badge/Developed%20by-https://www.phconsultoria.com.br-blue)](https://www.phconsultoria.com.br)<br>
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+* Ansible 7.3.0+
+* Targets Operatios Systems Homologated:
+  * RedHat Like
+    * CentOS 7.9
+    * Amazon Linux V2
+    * Rocky Linux
 
-Role Variables
---------------
+## Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Variables are available in vars directory. Read and change this. The required variables are:
 
-Dependencies
-------------
+* root_dir:
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
-Example Playbook
-----------------
+## Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+    - name: Example Playbook
+      hosts: all
+      roles: 
+        - nginx
 
-License
--------
+## License
 
-BSD
+[![License](https://img.shields.io/badge/License-Apache2.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
 
-Author Information
-------------------
+This module is licensed under the Apache License Version 2.0, January 2004.
+Please see [LICENSE](LICENSE) for full details.
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Copyright &copy; 2022  [pH Consultoria](https://www.phconsultoria.com.br)
+
+## Author Information
+
+Founded in 2015 and based in Belo Horizonte/Brazil, the pH Consultoria is specialized in AWS cloud environments, 
+focused in Infrastructure, Security and Automations. We offer commercial support for all of our projects and encourage 
+you to reach out if you have any questions or need help. Feel free to email us at 
+contato@phconsultoria.com.br.<br>
+
+We can also help you with:
+* Consulting & training on AWS.
+  * Security
+  * Infrastructure
+  * Automations (Infra as a Code, Configuration Management)
+<br>
