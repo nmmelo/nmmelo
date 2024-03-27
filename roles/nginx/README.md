@@ -1,7 +1,7 @@
 # Nginx Community Edition
 
 This Ansible Role is used for install [Nginx Community Edition](https://www.nginx.com/resources/wiki/community/) in the lastest version, using sample config files created
-by pH Consultoria.
+by nmmelo.
 <br>
 <br>
 
@@ -16,8 +16,7 @@ Requirements
   * RedHat Like
     * CentOS 7.9
     * Amazon Linux V2
-    * Rocky Linux
-
+    * Oracle Linux 9
 ## Role Variables
 
 Variables are available in vars directory. Read and change this. The required variables are:
@@ -40,18 +39,17 @@ Including an example of how to use your role (for instance, with variables passe
 This module is licensed under the Apache License Version 2.0, January 2004.
 Please see [LICENSE](LICENSE) for full details.
 
-Copyright &copy; 2022  [pH Consultoria](https://www.phconsultoria.com.br)
+Copyright &copy; 2024  [nmmelo]
 
 ## Author Information
 
-Founded in 2015 and based in Belo Horizonte/Brazil, the pH Consultoria is specialized in AWS cloud environments, 
-focused in Infrastructure, Security and Automations. We offer commercial support for all of our projects and encourage 
-you to reach out if you have any questions or need help. Feel free to email us at 
-contato@phconsultoria.com.br.<br>
+Texto.<br>
 
 We can also help you with:
-* Consulting & training on AWS.
-  * Security
+* DBA and Devops.
+  * Database System
   * Infrastructure
   * Automations (Infra as a Code, Configuration Management)
+  * Backup solution
+  * Application Server (tomcat, apache, IIS)
 <br>
