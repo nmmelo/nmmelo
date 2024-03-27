@@ -25,6 +25,15 @@
     mode: 0644
   when: ansible_distribution == "Amazon"
 
+- name: SYSTEM |Yum remove old Nginx Installation
+  ansible.builtin.yum:
+    name: "nginx*"
+    state: absent
+    autoremove: yes
+  when: ansible_distribution == "CentOS" or ansible_distribution == "OracleLinux" 
+  tags:
+    - teste
+
 - name: SYSTEM | Updating System
   ansible.builtin.yum:
     name: "*"
@@ -41,6 +50,7 @@
   ansible.builtin.yum:
      name: ['nginx.x86_64']
      state: latest
+     skip_broken: true
   environment:
     http_proxy: "{{ http_proxy }}"
     https_proxy: "{{ https_proxy }}"
@@ -76,4 +86,30 @@
     - { src: 'vhost.example', dest: '/etc/nginx/vhosts.d/vhost.example'}
     - { src: 'dhparam.pem', dest: '/etc/nginx/cert/dhparam.pem'}
   tags: copy_nginx_files
+
+- name: NGINX | Creating nginx root directory
+  ansible.builtin.file:
+    path: "{{ root_dir }}"
+    state: directory
+    mode: 0775
+    owner: nginx
+    group: nginx
+    recurse: yes
+
+- name: NGINX | extracting static website (template)
+  ansible.builtin.unarchive:
+    src: website.tar.gz
+    dest: "{{ root_dir }}"
+    owner: nginx
+    group: nginx
+    remote_src: no # Opcional - Default is no
+  notify: Restarting nginx
+
+- name: SYSTEM  | Change Selinux
+  ansible.builtin.replace:
+      dest: /etc/sysconfig/selinux
+      regexp: "SELINUX=enforcing"
+      replace: "SELINUX=Permissive"
+  notify: Restarting nginx
+  ignore_errors: true
 ...
