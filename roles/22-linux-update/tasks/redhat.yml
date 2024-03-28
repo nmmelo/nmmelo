@@ -4,8 +4,19 @@
     name: "*"
     state: latest
     update_cache: yes
-  #environment:
-    #http_proxy: "{{ http_proxy }}"
-    #https_proxy: "{{ https_proxy }}"
-  #when: ansible_distribution in ["OracleLinux", "Red Hat Enterprise Linux", "CentOS"]
+
+- name: DNF | Update All Packages
+  ansible.builtin.shell:
+   cmd: yum update --nobest -y
+  changed_when: false
+
+- name: DNF | Remove old kernels
+  ansible.builtin.shell:
+     cmd: dnf remove --oldinstallonly --setopt installonly_limit=2 kernel -y
+  become: true
+  register: output_dnf
+  ignore_errors: true
+  changed_when: false
+  tags:
+   - boot-size
 ...

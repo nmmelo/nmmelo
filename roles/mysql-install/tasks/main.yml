@@ -10,6 +10,8 @@
     https_proxy: "{{ https_proxy }}"
   when: ansible_distribution in ['Debian','Ubuntu']
   notify: Restart Mysql Server
+  tags:
+    - mysql-install
 
 - name: SYSTEM | Installing Mysql Server by YUM
   import_tasks: redhat.yml
@@ -18,6 +20,8 @@
     https_proxy: "{{ https_proxy }}"
   when: ansible_distribution in ['OracleLinux','CentOS']
   notify: Restart Mysql Server
+  tags:
+   - mysql-install
 
 - name: SYSTEM | start and enable mysql Service
   ansible.builtin.service:
@@ -25,6 +29,8 @@
     state: started
     enabled: yes
   ignore_errors: true
+  tags:
+   - mysql-install
 
 - name: MYSQL | Changed the root password
   community.mysql.mysql_user:
@@ -36,6 +42,8 @@
     password: "{{ mysql_root_password }}"
     host: localhost
   ignore_errors: true
+  tags:
+    - mysql-install
 
 - name: MYSQL | Remove remote root
   community.mysql.mysql_user:
@@ -46,50 +54,120 @@
     host: "{{ ansible_fqdn }}"
     state: absent
   ignore_errors: true
+  tags:
+   - mysql-install
 
 
 - name: MYSQL | Creating mysql user {{ db_user }}
   community.mysql.mysql_user:
     column_case_sensitive: true
     login_user: root
-    login_password: "{{ mysql_root_password | password_hash}}"
+    login_password: "{{ mysql_root_password }}"
     name: "{{ db_user }}"
-    password: "{{ db_pass | password_hash }}"
+    encrypted: false
+    password: "{{ db_pass }}"
     priv: '*.*:ALL'
     host: '%'
     state: present
   ignore_errors: true
   tags:
    - create-user-teste
+   - mysql-install
 
 - name: MYSQL | Creating {{ db_name }} database
   community.mysql.mysql_db:
     name: "{{ db_name }}"
+    check_implicit_admin: true
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
     state: present
   ignore_errors: true
+  tags:
+   - mysql-install
  
 - name: SYSTEM | Download and Extracting the Database
   import_tasks: import.yml
   tags:
    - download-files
    - create-db-employees
+   - mysql-install
+
+- name: create /root/.my.cnf with password credentials
+  blockinfile:
+      path: /root/.my.cnf
+      mode: 0600
+      block: |
+        [client]
+        user=root
+        password={{ mysql_root_password }}
+
+        [mysql]
+        user=root
+        password={{ mysql_root_password }}
+
+        [mysqldump]
+        user=root
+        password={{ mysql_root_password }}
+
+        [mysqldiff]
+        user=root
+        password={{ mysql_root_password }}
+      create: yes
+  #tags:
+  #  - create-db-employees
+  #  - mysql-install
 
 - name: MYSQL | Create mysql database
   mysql_db:
-    login_unix_socket: /var/run/mysqld/mysqld.sock
     name: "{{ db_user_1 }}"
+    check_implicit_admin: true
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
     state: present 
   ignore_errors: true
   tags:
     - create-db-employees
+    - mysql-install
 
 - name: MYSQL | Creating {{ db_user_1 }} database
   community.mysql.mysql_db:
     name: "{{ db_user_1 }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
     state: import
     force: true
     target: /tmp/test_db-master/employees.sql
+  register: sql_query_output1
   ignore_errors: true
+  tags:
+    - create-db-employees1
+
+- name: MYSQL | Creating {{ db_user_1 }} database v2
+  ansible.builtin.shell:
+    cmd: mysql -u root -p "{{ mysql_root_password }}" < /tmp/test_db-master/employees.sql
+  register: sql_query_output
+  changed_when: true
+  tags:
+    - create-db-employees
+    - mysql-install
+
+- name: MYSQL | Checking {{ db_user_1 }} database
+  community.mysql.mysql_db:
+    name: "{{ db_user_1 }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    state: import
+    force: true
+    target: /tmp/test_db-master/test_employees_md5.sql
+  register: sql_query_output
+  ignore_errors: true
+  tags:
+    - create-db-employees
+    - mysql-install
+
+- name: SYSTEM | Debug
+  ansible.builtin.debug:
+    msg: "{{ sql_query_output1 }}"
   tags:
     - create-db-employees
 
@@ -102,4 +180,6 @@
   ignore_errors: true
   notify:
     - Restart Mysql Server
+  tags:
+    - mysql-install
 ...

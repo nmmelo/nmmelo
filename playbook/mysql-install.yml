@@ -3,5 +3,6 @@
   hosts: debian:!redhat
   become: true
   roles:
+    #- 22-linux-update
     - mysql-install
 ...

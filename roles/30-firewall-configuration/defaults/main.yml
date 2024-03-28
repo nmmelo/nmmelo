@@ -98,6 +98,13 @@ servers:
           - "192.168.56.104" # ansible-test1
           - "192.168.56.105" # ansible-test2
           - "192.168.56.168" # mac
+      - name: "ipset-mysql"
+        entries:
+          - "192.168.56.1" # localhost
+          - "192.168.56.102" # ansible-server
+          - "192.168.56.104" # ansible-test1
+          - "192.168.56.105" # ansible-test2
+          - "192.168.56.168" # mac
       - name: "ipset-squid"
         entries:
           - "192.168.56.102" # ansible-server

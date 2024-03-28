@@ -1,18 +1,46 @@
 ---
 - name: APT | Update update_cache
   ansible.builtin.apt:
-    update_cache: yes
-  #environment:
-    #http_proxy: "{{ http_proxy }}"
-    #https_proxy: "{{ https_proxy }}"
-  #when: ansible_distribution in ["Ubuntu", "Debian"]
+    update_cache: true
 
 - name: APT | Update Systems
   ansible.builtin.apt:
     name: "*"
     state: latest
-  #environment:
-    #http_proxy: "{{ http_proxy }}"
-    #https_proxy: "{{ https_proxy }}"
-  #when: ansible_distribution in ["Ubuntu", "Debian"]
+
+- name: Copy the kernel removal script to the remote host
+  ansible.builtin.copy:
+    src: kernel_removal_script.sh  
+    dest: /opt/kernel_removal_script.sh
+    mode: '0755'  # Make the script executable
+  when: ansible_distribution == 'Ubuntu'  # Add appropriate distribution check
+
+- name: Run the kernel removal script
+  ansible.builtin.command: /opt/kernel_removal_script.sh
+  ignore_errors: true  # Continue playbook execution even if script fails
+
+- name: Update apt-get repo and cache
+  ansible.builtin.apt: 
+    update_cache: true
+    force_apt_get: true
+    cache_valid_time: 3600
+
+- name: Check security package upgrades
+  ansible.builtin.shell: apt-get -s dist-upgrade | grep "^Inst" | grep -i securi | awk -F " " {'print $2'}
+  register: security_packages
+  changed_when: false
+
+- name: Install security packages
+  ansible.builtin.apt:
+    name: "{{ security_packages.stdout_lines }}"
+    state: latest
+  when: security_packages.stdout_lines | length > 0
+
+- name: Remove dependencies that are no longer required
+  ansible.builtin.apt:
+    autoremove: yes
+
+- name: Run the kernel removal script
+  ansible.builtin.command: /opt/kernel_removal_script.sh
+  ignore_errors: true  # Continue playbook execution even if script fails
 ...

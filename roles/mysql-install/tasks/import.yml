@@ -27,11 +27,21 @@
 - name: SYSTEM | change employees sql file
   ansible.builtin.lineinfile:
       path: /tmp/test_db-master/employees.sql
-      search_string: 'USE employees;'
-      insertafter: 'USE employees;'
-      line: 'set storage_engine = InnoDB;'
+      backup: true
+      firstmatch: true
+      #search_string: \/*!50503 set default_storage_engine = InnoDBUSE employees;
+      insertafter: ^USE employees;
+      line: 'set default_storage_engine = InnoDB;'
+      # select CONCAT('default storage engine: ', @@default_storage_engine) as INFO;
       #replace: "set storage_engine = InnoDB;"
+  register: output
   ignore_errors: true
   tags:
     - download-files
+
+#- name: SYSTEM | Debug
+#  ansible.builtin.debug:
+#    msg: "{{ output }}"
+#  tags:
+#    - download-files
 ...
