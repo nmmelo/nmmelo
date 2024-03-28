@@ -136,20 +136,22 @@
     login_password: "{{ mysql_root_password }}"
     state: import
     force: true
-    target: /tmp/test_db-master/employees.sql
+    chdir: /tmp/test_db-master/
+    target: employees.sql
   register: sql_query_output1
   ignore_errors: true
   tags:
     - create-db-employees1
 
-- name: MYSQL | Creating {{ db_user_1 }} database v2
-  ansible.builtin.shell:
-    cmd: mysql -u root -p "{{ mysql_root_password }}" < /tmp/test_db-master/employees.sql
-  register: sql_query_output
-  changed_when: true
-  tags:
-    - create-db-employees
-    - mysql-install
+#- name: MYSQL | Creating {{ db_user_1 }} database v2
+#  ansible.builtin.shell:
+#    chdir: /tmp/test_db-master/
+#    cmd: mysql -u root  < employees.sql
+#  register: sql_query_output
+#  changed_when: true
+#  tags:
+#    - create-db-employees2
+#    - mysql-install
 
 - name: MYSQL | Checking {{ db_user_1 }} database
   community.mysql.mysql_db:
@@ -158,7 +160,8 @@
     login_password: "{{ mysql_root_password }}"
     state: import
     force: true
-    target: /tmp/test_db-master/test_employees_md5.sql
+    chdir: /tmp/test_db-master/
+    target: test_employees_md5.sql
   register: sql_query_output
   ignore_errors: true
   tags:
