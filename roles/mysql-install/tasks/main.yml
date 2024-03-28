@@ -61,14 +61,15 @@
 - name: MYSQL | Creating mysql user {{ db_user }}
   community.mysql.mysql_user:
     column_case_sensitive: true
-    login_user: root
-    login_password: "{{ mysql_root_password }}"
-    name: "{{ db_user }}"
+    login_user: "{{ db_user }}"
+    login_password: "{{ db_pass }}"
+    name: "{{ db_user_teste }}"
     encrypted: false
-    password: "{{ db_pass }}"
+    password: "{{ db_pass_teste }}"
     priv: '*.*:ALL'
     host: '%'
     state: present
+  register: sql_query_output
   ignore_errors: true
   tags:
    - create-user-teste
@@ -168,11 +169,12 @@
     - create-db-employees
     - mysql-install
 
-- name: SYSTEM | Debug
-  ansible.builtin.debug:
-    msg: "{{ sql_query_output1 }}"
-  tags:
-    - create-db-employees
+#- name: SYSTEM | Debug
+# ansible.builtin.debug:
+#    msg: "{{ sql_query_output }}"
+#  tags:
+#    - create-db-employees
+#    - create-user-teste
 
 - name: Enable remote login to mysql
   ansible.builtin.lineinfile:
