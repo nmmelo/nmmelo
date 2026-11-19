@@ -5,7 +5,7 @@
 
 ---
 
-### 🛠 Tech Stack
+### 🛠 Tech Stack 
 
 **Bases de Dados**
 
