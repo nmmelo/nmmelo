@@ -38,7 +38,7 @@
 <p align="left">
   <a href="https://github.com/nmmelo">
     <img height="170" src="https://github-stats-extended.vercel.app/api?username=nmmelo&show_icons=true&theme=algolia&include_all_commits=true" />
-    <img height="170" src="https://github-stats-extended.vercel.app/api/top-langs/?username=nmmelo&layout=compact&langs_count=8&theme=algolia" />
+    <img height="170" src="https://github-stats-extended.vercel.app/api/top-langs/?username=nmmelo&layout=compact&langs_count=8&theme=algolia&v=2" />
   </a>
 </p>
 
